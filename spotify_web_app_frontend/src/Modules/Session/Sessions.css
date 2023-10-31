@@ -1,0 +1,42 @@
+.session-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #1b1b1b;
+    color: white;
+    height: 100vh;
+}
+.title {
+    font-size: 24px;
+    /*color: #333; !* Dark text color *!*/
+}
+
+h2 {
+    font-size: 16px;
+}
+
+.person {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+.Spotify_PFP {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+/* Add a hover effect for the profile picture */
+.Spotify_PFP:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s;
+}
+
+/* Style the "Waiting..." text */
+p:last-child {
+    font-style: italic;
+    color: #777; /* Lighter text color */
+}
