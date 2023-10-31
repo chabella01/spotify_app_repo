@@ -4,17 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f002b277-2da5-4ab5-a920-6d9a3f7620f4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/spotify_web_app_frontend/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spotify_web_app_frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/spotify_web_app_frontend/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/Callback/Callback.js" beforeDir="false" afterPath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/Callback/Callback.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/Connections/Connections.css" beforeDir="false" afterPath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/Connections/Connections.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/Connections/Connections.js" beforeDir="false" afterPath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/Connections/Connections.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/Routing/AuthProvider.js" beforeDir="false" afterPath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/Routing/AuthProvider.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/Session/Sessions.css" beforeDir="false" afterPath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/Session/Sessions.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/Session/Sessions.js" beforeDir="false" afterPath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/Session/Sessions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/SpotifyHelpers/SpotifyHelpers.js" beforeDir="false" afterPath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/SpotifyHelpers/SpotifyHelpers.js" afterDir="false" />
-    </list>
+    <list default="true" id="f002b277-2da5-4ab5-a920-6d9a3f7620f4" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -65,7 +55,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1698169520865</updated>
-      <workItem from="1698169526467" duration="52563000" />
+      <workItem from="1698169526467" duration="54698000" />
     </task>
     <servers />
   </component>
