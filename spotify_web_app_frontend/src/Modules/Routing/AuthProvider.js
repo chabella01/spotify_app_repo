@@ -1,7 +1,7 @@
 import { createContext, useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "./useLocalStorage";
-import {beginLogin} from "../SpotifyHelpers/SpotifyHelpers";
+import {loginUser} from "../SpotifyHelpers/SpotifyHelpers";
 import {logout} from '../SpotifyHelpers/SpotifyHelpers'
 const AuthContext = createContext(null)
 
@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (data) => {
         setUser(data)
-        await beginLogin()
+        await loginUser()
         navigate('/connections') // set to correct path later
     }
 

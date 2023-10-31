@@ -1,49 +1,70 @@
 import {React, useState} from 'react'
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
-import {useAuth} from "../Routing/AuthProvider";
-import Container from "react-bootstrap/Container";
 import './Connections.css'
 import {useNavigate} from "react-router-dom";
+
 function Connections() {
 
-    const [sessionId, setessionId] = useState(0)
+    const [sessionId, setSessionId] = useState(0)
 
     const navigate = useNavigate()
 
     const handleChangeInput = (e) => {
-        setessionId(e)
+        setSessionId(e)
     }
 
     const handleClickJoinSession = (e) => {
         e.preventDefault()
-        navigate('/sessions', { state: { sessionId: sessionId }})
+        navigate('/sessions', {state: {sessionId: sessionId}})
     }
 
     const handleClickCreateSession = (e) => {
         e.preventDefault()
-        navigate('/create_session')
+        navigate('/sessions', {state: {sessionId: sessionId}})
     }
 
+    const handleChangeSessionId = (e) => {
+        setSessionId(e.target.value)
+    }
+
+    const getProfileData = () => {
+        const profile = localStorage.getItem('profile')
+
+        const {display_name} = JSON.parse(profile)
+
+        if(profile) {
+            return (
+                <div>
+                    Welcome {display_name}
+                </div>
+            )
+
+        }
+    }
 
     return (
-        <Container className={'connections-container'}>
-            <label htmlFor={'numericInput'}> Enter a Session ID To Join A Pre Existing Session</label>
-            <input
-                type={'number'}
-                id={'numericInput'}
-                min={0}
-                max={9999}
-                onChange={handleChangeInput}
-            />
-            <Button className={'session-button'} onClick={handleClickJoinSession}>
-                Join Session
-            </Button>
-            <div className={'gen-text'}> Or </div>
-            <Button className={'session-button'} onClick={handleClickCreateSession}>
-                Create a New Session
-            </Button>
-        </Container>
+        <div className="connections-container" id="container">
+            {getProfileData()}
+                <title>Spotify Page to create session button</title>
+                <link rel="stylesheet" href="connection_page_styles.css"/>
+            <div className={'form-container'}>
+                <label htmlFor="numericInput">Enter 4-digit Session ID:</label>
+                <input
+                    type="number"
+                    id="numericInput"
+                    name="numericInput"
+                    min="0"
+                    max="9999"
+                    maxLength="4"
+                    onChange={handleChangeSessionId}
+                />
+                <button className={'session-button'}
+                    onClick={handleClickCreateSession}
+                >
+                    Join Existing Session</button>
+                <button className={"session-button"}>Or Create A New Session</button>
+            </div>
+        </div>
+
     )
 }
 
