@@ -32,9 +32,9 @@ function Header() {
                     <Nav.Link onClick={auth.logout}>
                         Logout
                     </Nav.Link>
-                    <Nav.Link className={'nav-link'}>
-                        Profile
-                    </Nav.Link>
+                    {/*<Nav.Link className={'nav-link'}>*/}
+                    {/*    Profile*/}
+                    {/*</Nav.Link>*/}
                 </>
             )
         }
