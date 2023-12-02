@@ -1,0 +1,3 @@
+CLIENT_ID = "4e8f8455d67249839bef6a8dc50cabb7"
+CLIENT_SECRET = "4d88d35893844a2fab61b9d539ce55c1"
+REDIRECT_URI = "http://localhost:3000/callback"

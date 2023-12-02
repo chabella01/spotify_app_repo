@@ -1,3 +1,5 @@
+import {post} from "axios";
+
 export async function redirectToAuthCodeFlow(clientId) {
     const verifier = generateCodeVerifier(128);
     const challenge = await generateCodeChallenge(verifier);
@@ -8,7 +10,13 @@ export async function redirectToAuthCodeFlow(clientId) {
     params.append("client_id", '4e8f8455d67249839bef6a8dc50cabb7');
     params.append("response_type", "code");
     params.append("redirect_uri", "http://localhost:3000/callback");
-    params.append("scope", "user-read-private user-read-email");
+    params.append("scope", `user-read-private
+                                        user-read-email
+                                        user-modify-playback-state
+                                        user-read-playback-state 
+                                        user-read-currently-playing,
+                                        streaming
+                                        `);
     params.append("code_challenge_method", "S256");
     params.append("code_challenge", challenge);
 
@@ -80,6 +88,58 @@ async function fetchProfile(code) {
 
     return await result.json();
 }
+
+export async function fetchCurrentSong() {
+    let access_token = localStorage.getItem('access_token')
+   try {
+       const response = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
+           headers: {
+               Authorization: 'Bearer ' + access_token
+           }
+       })
+       return await response.json()
+   } catch(e) {
+        return -1
+   }
+}
+
+export async function playCurrentSong() {
+    let access_token = localStorage.getItem('access_token')
+    try {
+        const response = await fetch('https://api.spotify.com/v1/me/player/play', {
+            method: "PUT",
+            headers: {
+                Authorization: 'Bearer ' + access_token
+            }
+        })
+        return await response.json()
+    } catch(e) {
+        return -1
+    }
+}
+
+export async function setCurrentSong(uri) {
+    let access_token = localStorage.getItem('access_token')
+    try {
+        const response = await fetch('https://api.spotify.com/v1/me/player/play', {
+            method: "PUT",
+            headers: {
+                Authorization: 'Bearer ' + access_token
+            },
+            body: {
+                uris: uri
+            }
+        })
+        return await response.json()
+    } catch(e) {
+        return -1
+    }
+}
+
+async function getCurrentDeviceId() {
+
+}
+
 
 export async function setProfile(profile) {
     localStorage.setItem('profile', profile)

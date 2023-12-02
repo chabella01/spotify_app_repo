@@ -15,6 +15,61 @@ h2 {
     font-size: 16px;
 }
 
+.chat-room {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 20px;
+}
+
+/* Styles for individual messages */
+.message {
+    margin: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    max-width: 70%;
+    color: #1db954;
+    justify-content: space-evenly;
+    align-self: flex-end;
+}
+
+.sender-text {
+    justify-self: flex-end;
+    font-size: 8px;
+    color: gray;
+}
+.sender-text-curr-user {
+    font-size: 8px;
+    color: black;
+}
+.message-curr-user {
+    margin: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    max-width: 70%;
+    color: #1db954;
+    justify-self: flex-start;
+    align-self: flex-start;
+}
+
+.play-button {
+    height: 10px;
+}
+
+.messages {
+    overflow-y: auto;
+    display: flex;
+    /*justify-content: center;*/
+    /*align-items: flex-end;*/
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin-bottom: 20px;
+    width: 50%;
+}
 .person {
     display: flex;
     align-items: center;
