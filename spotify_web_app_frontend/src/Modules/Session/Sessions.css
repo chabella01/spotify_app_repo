@@ -58,6 +58,12 @@ h2 {
     height: 10px;
 }
 
+.tracks-query {
+    color: white;
+    border-radius: 5px;
+    background-color: black;
+}
+
 .messages {
     overflow-y: auto;
     display: flex;
