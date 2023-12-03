@@ -164,7 +164,7 @@ function Sessions() {
 
     return (
 
-        <div className={'session-container'}>
+        <div className={'container-fluid'}>
             <div>
                 <h1>Host: {host}</h1>
             </div>
@@ -183,7 +183,7 @@ function Sessions() {
                 <button className="btn btn-success" onClick={handleSearch}>Search</button>
             </div>
             
-            <div class='container bg-dark bg-gradiant' className="tracks-query">
+            <div class='container bg-dark bg-gradiant mt-4' className="tracks-query">
                 {tracksReturnedFromQuery ? tracksReturnedFromQuery.map((t, index) => {
                     console.log("t", t)
                     return (

@@ -17,7 +17,7 @@
 
 .nav-link {
     display: inline-flex;
-    ist-style: none;
+    list-style: none;
     color: #f2f2f2;
     text-decoration: none;
     font-size: 18px;
@@ -36,6 +36,7 @@
     opacity: 1;
     visibility: visible;
 }
+
 .test{
-    float:right;
+    border-radius: 25px;
 }

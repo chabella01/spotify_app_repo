@@ -54,9 +54,9 @@ function Header() {
     return (
         <Navbar expand={'lg'} className={'navbar-wrapper'} sticky={'top'}>
             <img src={logo} alt="Logo" className={"header-logo"}/>
-            <Container fluid className={'container'}>
+            <div className={'bg-dark test'}>
                 {renderNavBar()}
-            </Container>
+            </div>
         </Navbar>
     )
 }
