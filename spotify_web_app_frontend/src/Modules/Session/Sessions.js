@@ -4,6 +4,7 @@ import Form from 'react-bootstrap/Form'
 import {useLocation} from "react-router-dom";
 import pfp from '../../Assets/Images/pfp_demo.png'
 import './Sessions.css'
+import 'bootstrap/dist/css/bootstrap.css';
 import {
     fetchCurrentSong,
     getCurrentDeviceId,
@@ -162,26 +163,31 @@ function Sessions() {
 
 
     return (
+
         <div className={'session-container'}>
             <div>
-                Host: {host}
+                <h1>Host: {host}</h1>
             </div>
             <h1 className="title">People in Session</h1>
             <h2>Session ID {location.state.sessionId}</h2>
             <div>
-                <input
+           
+                <input className="searchBar"
                     type="text"
                     placeholder="Enter search query"
                     value={searchQuery}
+
                     onChange={handleInputChange}
                 />
-                <button onClick={handleSearch}>Search</button>
+            
+                <button className="btn btn-success" onClick={handleSearch}>Search</button>
             </div>
-            <div className="tracks-query">
+            
+            <div class='container bg-dark bg-gradiant' className="tracks-query">
                 {tracksReturnedFromQuery ? tracksReturnedFromQuery.map((t, index) => {
                     console.log("t", t)
                     return (
-                        <button key={index} className={'track'} onClick={() => setItemToQueue(t.uri)}>
+                        <button class='btn btn-secondary me-1 mt-1'key={index} className={'track'} onClick={() => setItemToQueue(t.uri)}>
                             {t.name}
                         </button>
                     );
@@ -213,7 +219,10 @@ function Sessions() {
                 />
                 <button onClick={sendMessage}>Send</button>
             </div>
+            
+
         </div>
+        
     )
 }
 

@@ -7,6 +7,7 @@ import logo from "../../Assets/Images/spotify connections-logos_white.png"
 import {React} from "react";
 import Button from "react-bootstrap/Button";
 import {useAuth} from "../Routing/AuthProvider";
+import 'bootstrap/dist/css/bootstrap.css';
 
 function Header() {
     const navigate = useNavigate()
@@ -29,12 +30,14 @@ function Header() {
         if (!(route.path === '/login') && !(route.path === '/register')) {
             return (
                 <>
+                    
                     <Nav.Link onClick={auth.logout}>
                         Logout
                     </Nav.Link>
                     {/*<Nav.Link className={'nav-link'}>*/}
                     {/*    Profile*/}
                     {/*</Nav.Link>*/}
+                    
                 </>
             )
         }
