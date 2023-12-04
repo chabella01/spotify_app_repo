@@ -55,23 +55,21 @@ function Sessions() {
                     setSongPlaying(false)
                 } else {
                     if (isOpen(socket)){
-                        if (socket && response && isHost) {
                             const songData = {
-                                type: 'uri',
+                                // type: 'uri',
+                                sender: currUser.id,
                                 uri: response.item.uri
                             }
                             socket.send(JSON.stringify(songData))
-                        }
-
                     }
                 }
             }
             else if (!isHost && isOpen(socket)){
                     const uri =  songUriFromHost
-                    console.log(uri)
-                    await setCurrentSong(uri)
+                    const uri_arr = [uri]
+                    const response_set = await setCurrentSong(uri)
+                console.log("RESONSE SET: ", response_set)
             }
-
         }, 3000);
 
         return () => {
@@ -82,7 +80,7 @@ function Sessions() {
 
 
     useEffect(() => {
-        const user = localStorage.getItem('user')
+        const user = sessionStorage.getItem('user')
         const userObj = JSON.parse(user)
         setCurrUser(userObj.user)
         // console.log(userObj.user.id)
@@ -95,9 +93,10 @@ function Sessions() {
             //     socket.send(JSON.stringify({ type: 'message', message: message, sender: userObj.user.username}))
             // }
         }
+
         socket.onmessage = (event) => {
             const message = JSON.parse(event.data)
-            // console.log(message)
+            console.log("MESSAGE ", message)
             if ('host' in message) {
                 setHost(message.host)
                 if (userObj.user.username === message.host) {
@@ -106,6 +105,7 @@ function Sessions() {
                 }
             }
             if ('uri' in message) {
+                console.log('uri in onmessage', message.uri)
                 setSongUriFromHost(message.uri)
             }
             if ('message' in message) {
@@ -116,6 +116,8 @@ function Sessions() {
                 setFirstRender(true)
             }
         }
+
+
         socket.onclose = (event) => {
             console.log('WebSocket disconnected:', event.code, event.reason)
         }
@@ -124,13 +126,13 @@ function Sessions() {
         }
     }, [])
 
-    useEffect(() => {
-        console.log("in use eff", tracksReturnedFromQuery)
-    }, [tracksReturnedFromQuery])
+    // useEffect(() => {
+    //     console.log("in use eff", tracksReturnedFromQuery)
+    // }, [tracksReturnedFromQuery])
 
     const sendMessage = () => {
         if (!isOpen(socket)){
-            const user = localStorage.getItem('user')
+            const user = sessionStorage.getItem('user')
             const userObj = JSON.parse(user)
             setCurrUser(userObj.user)
             // console.log(userObj.user.id)
@@ -156,7 +158,6 @@ function Sessions() {
             console.log(response)
         } else {
             // send socket message to room if the host receives it make
-            // and api call to spotify to add it to the queue
         }
     }
 
@@ -165,6 +166,9 @@ function Sessions() {
         <div className={'session-container'}>
             <div>
                 Host: {host}
+            </div>
+            <div>
+                CURRENT USER: {currUser.username}
             </div>
             <h1 className="title">People in Session</h1>
             <h2>Session ID {location.state.sessionId}</h2>
@@ -179,7 +183,6 @@ function Sessions() {
             </div>
             <div className="tracks-query">
                 {tracksReturnedFromQuery ? tracksReturnedFromQuery.map((t, index) => {
-                    console.log("t", t)
                     return (
                         <button key={index} className={'track'} onClick={() => setItemToQueue(t.uri)}>
                             {t.name}

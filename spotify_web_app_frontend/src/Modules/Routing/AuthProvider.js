@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         setUser(null)
-        window.localStorage.removeItem('tokenSet')
+        sessionStorage.removeItem('tokenSet')
         navigate('/login', { replace : true })
     }
 
