@@ -12,6 +12,7 @@ import CreateSession from "./Modules/CreateSession/CreateSession";
 import {useAuth} from "./Modules/Routing/AuthProvider";
 import {completeLogin, getAccessToken} from '../src/Modules/SpotifyHelpers/SpotifyHelpers'
 import Callback from '../src/Modules/Callback/Callback'
+import Sessions from "./Modules/Session/Sessions";
 function App() {
 
 
@@ -36,6 +37,14 @@ function App() {
                 element={
                     <ProtectedRoute>
                         <CreateSession />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path={'/sessions'}
+                element={
+                    <ProtectedRoute>
+                        <Sessions />
                     </ProtectedRoute>
                 }
             />

@@ -1,0 +1,103 @@
+.session-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #1b1b1b;
+    color: white;
+    height: 100vh;
+}
+.title {
+    font-size: 24px;
+    /*color: #333; !* Dark text color *!*/
+}
+
+h2 {
+    font-size: 16px;
+}
+
+.chat-room {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 20px;
+}
+
+/* Styles for individual messages */
+.message {
+    margin: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    max-width: 70%;
+    color: #1db954;
+    justify-content: space-evenly;
+    align-self: flex-end;
+}
+
+.sender-text {
+    justify-self: flex-end;
+    font-size: 8px;
+    color: gray;
+}
+.sender-text-curr-user {
+    font-size: 8px;
+    color: black;
+}
+.message-curr-user {
+    margin: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    max-width: 70%;
+    color: #1db954;
+    justify-self: flex-start;
+    align-self: flex-start;
+}
+
+.play-button {
+    height: 10px;
+}
+
+.tracks-query {
+    color: white;
+    border-radius: 5px;
+    background-color: black;
+}
+
+.messages {
+    overflow-y: auto;
+    display: flex;
+    /*justify-content: center;*/
+    /*align-items: flex-end;*/
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin-bottom: 20px;
+    width: 50%;
+}
+.person {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+.Spotify_PFP {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+/* Add a hover effect for the profile picture */
+.Spotify_PFP:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s;
+}
+
+/* Style the "Waiting..." text */
+p:last-child {
+    font-style: italic;
+    color: #777; /* Lighter text color */
+}

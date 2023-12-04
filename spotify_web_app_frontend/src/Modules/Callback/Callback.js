@@ -1,24 +1,27 @@
-import {completeLogin, getProfile} from '../SpotifyHelpers/SpotifyHelpers'
-import { useEffect } from 'react'
+import {completeLogin, getProfile, setProfile} from '../SpotifyHelpers/SpotifyHelpers'
+import {useEffect, useState} from 'react'
 import {useNavigate} from "react-router-dom";
+import {callback} from "../SpotifyHelpers/SpotifyHelpers";
 
 export default function Page() {
 
     const navigate = useNavigate()
+    const [count, setCount] = useState(0)
 
     useEffect(() => {
-        completeLogin()
-            .then(() => {
-               navigate('/connections')
-            }).then(() => {
-            getProfile().then(() => {
-                console.log('profile fetched')
-            })
+        callback().then(({accessToken, profile}) => {
+            if (accessToken && profile) {
+                localStorage.setItem('access_token', accessToken)
+                localStorage.setItem('profile', profile)
+                navigate('/connections')
+            }
+            // else {
+            //     navigate('/login', {state: {error: 'Error loggin into spotify'}})
+            // }
+
+        }).catch((e) => {
+            console.error(e)
         })
-            .catch((error) => {
-                console.error(error)
-                navigate('/')
-            })
     }, [])
 
     return (

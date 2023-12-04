@@ -1,181 +1,238 @@
-/**
- * @param {number} size
- */
-function randomBytes(size) {
-    return crypto.getRandomValues(new Uint8Array(size))
-}
+import {post} from "axios";
 
-/**
- * @param {Uint8Array} bytes
- */
-function base64url(bytes) {
-    return btoa(String.fromCharCode(...bytes))
-        .replace(/=/g, '')
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-}
+export async function redirectToAuthCodeFlow(clientId) {
+    const verifier = generateCodeVerifier(128);
+    const challenge = await generateCodeChallenge(verifier);
 
-/**
- * https://tools.ietf.org/html/rfc7636#section-4.2
- * @param {string} code_verifier
- */
-async function generateCodeChallenge(code_verifier) {
-    const codeVerifierBytes = new TextEncoder().encode(code_verifier)
-    const hashBuffer = await crypto.subtle.digest('SHA-256', codeVerifierBytes)
-    return base64url(new Uint8Array(hashBuffer))
-}
+    localStorage.setItem("verifier", verifier);
 
-/**
- * @param {RequestInfo} input
- * @param {RequestInit} [init]
- */
-async function fetchJSON(input, init) {
-    const response = await fetch(input, init)
-    const body = await response.json()
-    if (!response.ok) {
-        throw new ErrorResponse(response, body)
-    }
-    return body
-}
-
-class ErrorResponse extends Error {
-    /**
-     * @param {Response} response
-     * @param {any} body
-     */
-    constructor(response, body) {
-        super(response.statusText)
-        this.status = response.status
-        this.body = body
-    }
-}
-
-export async function beginLogin() {
-    // https://tools.ietf.org/html/rfc7636#section-4.1
-    const code_verifier = base64url(randomBytes(96))
-    const state = base64url(randomBytes(96))
-
-    const params = new URLSearchParams({
-        client_id: '4e8f8455d67249839bef6a8dc50cabb7', // need to get spotify id
-        response_type: 'code',
-        redirect_uri: 'http://localhost:3000/callback',
-        code_challenge_method: 'S256',
-        code_challenge: await generateCodeChallenge(code_verifier),
-        state: state,
-        scope: '',
-    })
-
-    sessionStorage.setItem('code_verifier', code_verifier)
-    sessionStorage.setItem('state', state)
-
-    window.location.href = `https://accounts.spotify.com/authorize?${params}`
-}
-
-export async function completeLogin() {
-    const code_verifier = window.sessionStorage.getItem('code_verifier')
-    const state = window.sessionStorage.getItem('state')
-
-    const urlParams = new URLSearchParams(window.location.search);
-    let code = urlParams.get('code');
-    console.log("DODE", code)
     const params = new URLSearchParams();
+    params.append("client_id", '4e8f8455d67249839bef6a8dc50cabb7');
+    params.append("response_type", "code");
+    params.append("redirect_uri", "http://localhost:3000/callback");
+    params.append("scope", `user-read-private
+                                        user-read-email
+                                        user-modify-playback-state
+                                        user-read-playback-state 
+                                        user-read-currently-playing,
+                                        streaming
+                                        `);
+    params.append("code_challenge_method", "S256");
+    params.append("code_challenge", challenge);
 
+    document.location = `https://accounts.spotify.com/authorize?${params.toString()}`;
+}
+
+export async function loginUser() {
+    const clientId = "4e8f8455d67249839bef6a8dc50cabb7";
+
+    await redirectToAuthCodeFlow(clientId);
+
+}
+
+export async function callback() {
+    const clientId = "4e8f8455d67249839bef6a8dc50cabb7";
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    const accessToken = await getAccessToken(clientId, code);
+
+    const profile = await fetchProfile(accessToken)
+
+
+    return {profile: JSON.stringify(profile), accessToken}
+}
+
+export async function getAccessToken(clientId, code) {
+    const verifier = localStorage.getItem("verifier");
+
+    const params = new URLSearchParams();
     params.append("client_id", '4e8f8455d67249839bef6a8dc50cabb7');
     params.append("grant_type", "authorization_code");
     params.append("code", code);
     params.append("redirect_uri", "http://localhost:3000/callback");
-    params.append("code_verifier", code_verifier);
-
+    params.append("code_verifier", verifier);
     const result = await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
         body: params
     });
 
-    const { access_token } = await result.json();
+    const {access_token} = await result.json();
+
     return access_token;
 }
 
-export function logout() {
+function generateCodeVerifier(length) {
+    let text = '';
+    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+    for (let i = 0; i < length; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+}
+
+async function generateCodeChallenge(codeVerifier) {
+    const data = new TextEncoder().encode(codeVerifier);
+    const digest = await window.crypto.subtle.digest('SHA-256', data);
+    return btoa(String.fromCharCode.apply(null, [...new Uint8Array(digest)]))
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
+}
+
+async function fetchProfile(code) {
+    const result = await fetch("https://api.spotify.com/v1/me", {
+        method: "GET", headers: {Authorization: `Bearer ${code}`}
+    });
+
+    return await result.json();
+}
+
+export async function fetchCurrentSong() {
+    let access_token = localStorage.getItem('access_token')
    try {
-       window.localStorage.removeItem('tokenSet')
-   } catch(e){
-       console.error(e)
+       const response = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
+           headers: {
+               Authorization: 'Bearer ' + access_token
+           }
+       })
+       return await response.json()
+   } catch(e) {
+        return -1
    }
 }
 
-/**
- * @param {RequestInfo} input
- */
-export async function fetchWithToken(input) {
-    const accessToken = await getAccessToken()
-
-    if (!accessToken) {
-        throw new ErrorResponse(new Response(undefined, { status: 401 }), {})
-    }
-
-    return fetchJSON(input, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-    })
-}
-
-/**
- * @param {{headers: {"Content-Type": string}, method: string, body: module:url.URLSearchParams}} params
- * @returns {Promise<string>}
- */
-async function createAccessToken(params) {
-
+export async function playCurrentSong() {
+    let access_token = localStorage.getItem('access_token')
     try {
-        const response = await fetchJSON('https://accounts.spotify.com/api/token', {
-            method: 'POST',
-            body: new URLSearchParams({
-                client_id: '4e8f8455d67249839bef6a8dc50cabb7'
-                ,
-                ...params,
-            }),
+        const response = await fetch('https://api.spotify.com/v1/me/player/play', {
+            method: "PUT",
+            headers: {
+                Authorization: 'Bearer ' + access_token
+            }
         })
+        return await response.json()
+    } catch(e) {
+        return -1
+    }
+}
 
-        console.log("response", response)
+export async function setCurrentSong(uri) {
+    let access_token = localStorage.getItem('access_token')
+    try {
+        const response = await fetch('https://api.spotify.com/v1/me/player/play', {
+            method: "PUT",
+            headers: {
+                Authorization: 'Bearer ' + access_token
+            },
+            body: {
+                uris: uri
+            }
+        })
+        return await response.json()
+    } catch(e) {
+        return -1
+    }
+}
 
-        const accessToken = response.access_token
-        const expires_at = Date.now() + 1000 * response.expires_in
+export async function getCurrentDeviceId() {
+    let access_token = localStorage.getItem('access_token')
+    try {
+        const response = await fetch('https://api.spotify.com/v1/me/player/devices', {
+            method: "GET",
+            headers: {
+                Authorization: 'Bearer ' + access_token
+            }
+        })
+        const data = await response.json()
+        const deviceId = data.devices.find((d) => d.name === 'Web Playback SDK').id
+        const set_response = await setCurrentDeviceId(deviceId)
+        console.log("response ion get curr device id: ", set_response)
+        return await response.json()
+    } catch(e) {
+        return -1
+    }
+}
 
+async function getCurrentDeviceIdLocal() {
+    let access_token = localStorage.getItem('access_token')
+    try {
+        const response = await fetch('https://api.spotify.com/v1/me/player/devices', {
+            method: "GET",
+            headers: {
+                Authorization: 'Bearer ' + access_token
+            }
+        })
+        const data = await response.json()
+        const deviceId = data.devices.find((d) => d.name === 'Web Playback SDK').id
+        return deviceId
+    } catch(e) {
+        return -1
+    }
+}
 
-        window.localStorage.setItem('tokenSet', JSON.stringify({ ...response, expires_at }))
-
-        return accessToken
+export async function setCurrentDeviceId(deviceId) {
+    let access_token = localStorage.getItem('access_token');
+    const device_ids = [deviceId];
+    try {
+        const response = await fetch('https://api.spotify.com/v1/me/player/', {
+            method: "PUT",
+            headers: {
+                Authorization: 'Bearer ' + access_token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ device_ids })
+        });
+        return await response.json();
     } catch (e) {
-        console.error(e)
+        return -1;
     }
 }
 
-/**
- * @returns {Promise<string>}
- */
- async function getAccessToken() {
-    let tokenSet = JSON.parse(window.localStorage.getItem('tokenSet'))
-
-    if (!tokenSet) return
-
-    if (tokenSet.expires_at < Date.now()) {
-        tokenSet = await createAccessToken({
-            grant_type: 'refresh_token',
-            refresh_token: tokenSet.refresh_token,
-        })
+export async function searchSongs(songToSearch) {
+    let access_token = localStorage.getItem('access_token');
+    const q = new URLSearchParams({
+        q: songToSearch,
+        type: 'track'
+    })
+    try {
+        const response = await fetch(`https://api.spotify.com/v1/search?${q}`, {
+            method: "GET",
+            headers: {
+                Authorization: 'Bearer ' + access_token,
+                'Content-Type': 'application/json'
+            },
+            // body: JSON.stringify({ q })
+        });
+        return await response.json();
+    } catch (e) {
+        return -1;
     }
-
-    return tokenSet.access_token
 }
 
-export async function getProfile() {
-    const access_token = localStorage.getItem('access_token');
+export async function setItemToQueue(uri) {
+    let access_token = localStorage.getItem('access_token');
+    const deviceId = await getCurrentDeviceIdLocal()
+    const q = new URLSearchParams({
+        uri: uri,
+        device_id: deviceId
+    })
+    try {
+        const response = await fetch(`https://api.spotify.com/v1/me/player/queue?${q}`, {
+            method: "POST",
+            headers: {
+                Authorization: 'Bearer ' + access_token,
+                'Content-Type': 'application/json'
+            },
+            // body: JSON.stringify({ q })
+        });
+        return await response.json();
+    } catch (e) {
+        return -1;
+    }
+}
 
-    const response = await fetch('https://api.spotify.com/v1/me', {
-        headers: {
-            Authorization: 'Bearer ' + access_token
-        }
-    });
-
-    const data = await response.json();
-    console.log(data)
+export async function setProfile(profile) {
+    localStorage.setItem('profile', profile)
 }
