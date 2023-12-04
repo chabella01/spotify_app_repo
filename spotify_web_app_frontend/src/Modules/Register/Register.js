@@ -16,6 +16,7 @@ function Register() {
     const [email, setEmail] = useState('')
     const [passwordsMatch, setPasswordsMatch] = useState(true)
     const [buttonDisabled, setButtonDisabled] = useState(true)
+    const [isEmailValid, setIsEmailValid] = useState(true);
 
 
     useEffect(() => {
@@ -63,10 +64,24 @@ function Register() {
         setPasswordVerify(e.target.value)
     }
 
+    // const handleChangeEmail = (e) => {
+    //     e.preventDefault()
+    //     const emailInput = e.target.value;
+    //     setEmail(e.target.value)
+    //     setIsEmailValid(validateEmail(emailInput));
+    // }
+
     const handleChangeEmail = (e) => {
-        e.preventDefault()
-        setEmail(e.target.value)
-    }
+        e.preventDefault();
+        const emailInput = e.target.value;
+        setEmail(emailInput);
+        setIsEmailValid(validateEmail(emailInput));
+    };    
+
+    const validateEmail = (email) => {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}]|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/;
+        return re.test(String(email).toLowerCase());
+    }    
 
     const handleRegister = async () => {
         try {
@@ -100,6 +115,11 @@ function Register() {
                         onChange={handleChangeEmail}
                     />
                 </Form.Group>
+                {!isEmailValid && email.length > 0 && 
+                    <Alert variant="warning">
+                        Warning: Invalid email format.
+                    </Alert>
+                }
                 <Form.Group className={"login-group"}>
                     <Form.Label className={"form-text"}>Username</Form.Label>
                     <Form.Control
@@ -121,7 +141,7 @@ function Register() {
                         className={'alert-warning'}
                         variant={'warning'}
                     >
-                        Warning: passwords do not match
+                        Warning: Passwords do not match.
                     </Alert> : null
                 }
                 <Form.Group className={"login-group"}>
