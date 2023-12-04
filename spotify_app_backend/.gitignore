@@ -1,9 +1,5 @@
 venv/
-*/__pycache__/*
-# Ignore Python bytecode files
-*.pyc
-
-# Ignore __pycache__ directories
-**/__pycache__/
-
-spotify_app_backend/spotify_backend/spotify_controller/migrations/
+*.sqlite3
+__pycache__/
+spotify_backend/__pycache__/
+spotify_controller/__pycache__/
