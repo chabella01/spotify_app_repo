@@ -64,13 +64,6 @@ function Register() {
         setPasswordVerify(e.target.value)
     }
 
-    // const handleChangeEmail = (e) => {
-    //     e.preventDefault()
-    //     const emailInput = e.target.value;
-    //     setEmail(e.target.value)
-    //     setIsEmailValid(validateEmail(emailInput));
-    // }
-
     const handleChangeEmail = (e) => {
         e.preventDefault();
         const emailInput = e.target.value;
