@@ -56,6 +56,7 @@ function Sessions() {
                 } else {
                     if (isOpen(socket)){
                         if (socket && response && isHost) {
+                            console.log('HOST SEINDGIN DATA')
                             const songData = {
                                 type: 'uri',
                                 uri: response.item.uri
@@ -68,7 +69,7 @@ function Sessions() {
             }
             else if (!isHost && isOpen(socket)){
                     const uri =  songUriFromHost
-                    console.log(uri)
+                    console.log("URIL: TRUING TO SET SONG", uri)
                     await setCurrentSong(uri)
             }
 
@@ -156,7 +157,6 @@ function Sessions() {
             console.log(response)
         } else {
             // send socket message to room if the host receives it make
-            // and api call to spotify to add it to the queue
         }
     }
 
@@ -179,7 +179,6 @@ function Sessions() {
             </div>
             <div className="tracks-query">
                 {tracksReturnedFromQuery ? tracksReturnedFromQuery.map((t, index) => {
-                    console.log("t", t)
                     return (
                         <button key={index} className={'track'} onClick={() => setItemToQueue(t.uri)}>
                             {t.name}
