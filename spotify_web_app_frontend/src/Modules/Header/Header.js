@@ -28,37 +28,34 @@ function Header() {
     const renderNavBar = () => {
         if (!(route.path === '/login') && !(route.path === '/register')) {
             return (
-                    // <a onClick={auth.logout}>
-                    //     Logout
-                    //     </a>
-                            <a class="nav-link" onClick={auth.logout}>Logout</a>
+                <>
+                    <Nav.Link onClick={auth.logout}>
+                        Logout
+                    </Nav.Link>
+                    {/*<Nav.Link className={'nav-link'}>*/}
+                    {/*    Profile*/}
+                    {/*</Nav.Link>*/}
+                </>
             )
         }
         else {
             return (
-                            <a class="nav-link" onClick={auth.logout}>About Us</a>
+                <Nav.Link className={'nav-link'}>
+                    About Us
+                </Nav.Link>
             )
         }
     }
 
 
     return (
-        // <Navbar expand={'lg'} className={'navbar-wrapper'} sticky={'top'}>
-        //     <img src={logo} alt="Logo" className={"header-logo"}/>
-        //     <Container fluid className={'container'}>
-        //         {renderNavBar()}
-        //     </Container>
-        // </Navbar>
-    //                 <div fluid className={'container'}>
-    //             {renderNavBar()}
-    //         </div>
-    // )
-    <nav class="navbar bg-body-tertiary nav-pills bg-dark" data-bs-theme="dark">
-        <img src={logo} alt="Logo" className={"header-logo"}/>
-        <div class='nav-item'>
-            {renderNavBar()}
-        </div>
-    </nav>
+        <Navbar expand={'lg'} className={'navbar-wrapper'} sticky={'top'}>
+            <img src={logo} alt="Logo" className={"header-logo"}/>
+            <Container fluid className={'container'}>
+                {renderNavBar()}
+            </Container>
+        </Navbar>
     )
-    }
+}
+
 export default Header
