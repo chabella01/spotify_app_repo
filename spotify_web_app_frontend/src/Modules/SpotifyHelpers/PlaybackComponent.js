@@ -51,7 +51,7 @@ function PlaybackComponent(props) {
         script.async = true;
 
         document.body.appendChild(script);
-        const accessToken = localStorage.getItem('access_token')
+        const accessToken = sessionStorage.getItem('access_token')
 
         if (!player) {
             window.onSpotifyWebPlaybackSDKReady = () => {
@@ -129,17 +129,7 @@ function PlaybackComponent(props) {
                         <div className="now-playing__artist">Artist {
                            current_track.artists[0].name
                         }</div>
-                        <button className="btn-spotify" onClick={() => { player.previousTrack() }} >
-                            &lt;&lt;
-                        </button>
 
-                        <button className="btn-spotify" onClick={() => { player.togglePlay() }} >
-                            { is_paused ? "PLAY" : "PAUSE" }
-                        </button>
-
-                        <button className="btn-spotify" onClick={() => { player.nextTrack() }} >
-                            &gt;&gt;
-                        </button>
                     </div>
                 </>
             )
@@ -154,11 +144,37 @@ function PlaybackComponent(props) {
         }
     }
 
+    const RenderButtons = () => {
+        if (props.isHost) {
+            return (
+                <>
+                    <button className="btn-spotify" onClick={() => { player.previousTrack() }} >
+                        &lt;&lt;
+                    </button>
+
+                    <button className="btn-spotify" onClick={() => { player.togglePlay() }} >
+                        { is_paused ? "PLAY" : "PAUSE" }
+                    </button>
+
+                    <button className="btn-spotify" onClick={() => { player.nextTrack() }} >
+                        &gt;&gt;
+                    </button>
+                </>
+        )
+        } else {
+            return (
+                <div>Only host can manage playback</div>
+            )
+        }
+
+    }
+
     return (
         <>
             <div className="container">
                 <div className="main-wrapper">
                    <RenderArtistImage />
+                    <RenderButtons />
                 </div>
             </div>
         </>

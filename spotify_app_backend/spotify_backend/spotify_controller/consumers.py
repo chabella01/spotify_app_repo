@@ -20,6 +20,18 @@ class RoomConsumer(AsyncWebsocketConsumer):
         except SessionRoom.DoesNotExist:
             return None
 
+    @database_sync_to_async
+    def check_if_host(self, id):
+        try:
+            User = get_user_model()
+            user = User.objects.get(id=id)
+            room = SessionRoom.objects.get(name=self.room_name)
+            if room.host == user:
+                return True
+            else:
+                return False
+        except SessionRoom.DoesNotExist:
+            return None
 
     @database_sync_to_async
     def create_or_join_room(self, user_id, room_name):
@@ -56,12 +68,14 @@ class RoomConsumer(AsyncWebsocketConsumer):
         self.user_id = self.scope['url_route']['kwargs']['user_id']
         await self.create_or_join_room(self.user_id, self.room_name)
         self.host = await self.get_room_host(self.room_name)
+        self.isUserHost = await self.check_if_host(self.user_id)
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
         await self.send(text_data=json.dumps({
                     'host': self.host.username,
                     'room_name': self.room_name,
-                    'past_messages': self.messages
+                    'past_messages': self.messages,
+                    'isHost': self.isUserHost
                 }))
 
     async def disconnect(self, close_code):
@@ -69,24 +83,30 @@ class RoomConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        print(text_data)
+        if 'type' in text_data_json:
+            print('message type: ', text_data_json['type'])
+#
         if 'uri' in text_data_json:
+            self.sender = text_data_json['sender']
             uri = text_data_json['uri']
+            isHost = await self.check_if_host(self.sender)
+            print('uri', uri    )
             await self.channel_layer.group_send(self.room_group_name, {
                 'type': 'uri',
-                'uri': uri
+                'uri': uri,
+                'sender': self.sender
             })
-            print(uri)
             return
-        message = text_data_json['message']
-        sender = text_data_json['sender']
-        new_msg = await self.create_chat(message, sender)
-        await self.channel_layer.group_send(self.room_group_name, {
-            'type': 'chat_message',
-            'message': message,
-            'sender': sender
-        })
-#
+        if 'message' in text_data_json:
+            message = text_data_json['message']
+            sender = text_data_json['sender']
+            new_msg = await self.create_chat(message, sender)
+            await self.channel_layer.group_send(self.room_group_name, {
+                'type': 'chat_message',
+                'message': message,
+                'sender': sender
+            })
+
     async def chat_message(self, event):
         message = event['message']
         sender = event['sender']
@@ -98,7 +118,13 @@ class RoomConsumer(AsyncWebsocketConsumer):
 
     async def uri(self, event):
         uri = event['uri']
-#         new_msg = await self.create_chat(message, sender)  # Pass arguments without explicit names
+        sender = event['sender']
+        print('receving uri')
         await self.send(text_data=json.dumps({
-            'uri': uri
+            'uri': uri,
+            'sender': sender,
         }))
+
+
+# host sends uri to the server
+# server responds to all users except the host with the URI

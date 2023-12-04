@@ -11,8 +11,8 @@ export default function Page() {
     useEffect(() => {
         callback().then(({accessToken, profile}) => {
             if (accessToken && profile) {
-                localStorage.setItem('access_token', accessToken)
-                localStorage.setItem('profile', profile)
+                sessionStorage.setItem('access_token', accessToken)
+                sessionStorage.setItem('profile', profile)
                 navigate('/connections')
             }
             // else {
