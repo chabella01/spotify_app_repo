@@ -31,11 +31,7 @@
 
     margin: 10px;
 }
-.profile-image {
-    width: 150px;
-    height: 150px;
-    align-self: center;
-}
+
 .session-button {
     display: inline-block;
     background-color: #1DB954; /* Spotify green */

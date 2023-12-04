@@ -28,9 +28,7 @@
     align-self: flex-end;
 }
 
-.container {
-    background-color: #535353;
-}
+
 
 .nav-links li:hover {
     transition: all 0.3s ease;

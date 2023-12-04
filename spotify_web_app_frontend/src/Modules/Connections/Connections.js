@@ -1,6 +1,5 @@
 import {React, useState} from 'react'
 import './Connections.css'
-import 'bootstrap/dist/css/bootstrap.css';
 import {useNavigate} from "react-router-dom";
 
 function Connections() {
@@ -29,20 +28,14 @@ function Connections() {
 
     const getProfileData = () => {
         const profile = localStorage.getItem('profile')
-        const {display_name, images} = JSON.parse(profile)
-        console.log(images)
+
+        const {display_name} = JSON.parse(profile)
+
         if(profile) {
             return (
                 <div>
-                    <h2>
-                        Welcome {display_name}
-                        
-                    </h2>
-                    <div class='text-center'>
-                        <img class="rounded mx-auto d-block" src={images[0].url} alt=''/>
-                    </div>
+                    Welcome {display_name}
                 </div>
-                
             )
 
         }
@@ -50,13 +43,12 @@ function Connections() {
 
     return (
         <div className="connections-container" id="container">
+            {getProfileData()}
                 <title>Spotify Page to create session button</title>
                 <link rel="stylesheet" href="connection_page_styles.css"/>
-                    {getProfileData()}
-            <form class='form-floating'>
+            <div className={'form-container'}>
                 <label htmlFor="numericInput">Enter 4-digit Session ID:</label>
                 <input
-                class="form-control"
                     type="number"
                     id="numericInput"
                     name="numericInput"
@@ -70,7 +62,7 @@ function Connections() {
                 >
                     Join Existing Session</button>
                 <button className={"session-button"}>Or Create A New Session</button>
-            </form>
+            </div>
         </div>
 
     )
