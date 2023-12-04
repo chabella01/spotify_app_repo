@@ -6,6 +6,7 @@ import {useNavigate} from "react-router-dom";
 import logo from "../../Assets/Images/spotify connections-logos_transparent.png";
 import axios from "axios";
 import {useAuth} from "../Routing/AuthProvider";
+import Alert from 'react-bootstrap/Alert';
 function Login() {
 
     const base_url = 'http://127.0.0.1:8000/'
@@ -16,6 +17,9 @@ function Login() {
     const [password, setPassword] = useState('')
 
     const auth = useAuth()
+
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
 
     function handleClick() {
         navigate('/register')
@@ -37,13 +41,22 @@ function Login() {
             await auth.login(response.data)
         } catch (e) {
             console.log(e)
+            showAlertMessage('Incorrect email or password. Please try again.');
         }
     }
+
+    const showAlertMessage = (message) => {
+        setAlertMessage(message);
+        setShowAlert(true);
+    };    
 
     return (
         <div className={'login-wrapper'}>
             <Form className={"form-wrapper"}>
                 <div className={'header-login'}>
+                    {showAlert && <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
+                    {alertMessage}
+                    </Alert>}
                     Login
                 </div>
                 <Form.Group className={"login-group"}>
@@ -68,7 +81,7 @@ function Login() {
                     </Button>
                 </div>
                 <div className={'register-wrapper'}>
-                    <div className={"form-text sub-font-color"}> Don't have an account</div>
+                    <div className={"form-text sub-font-color"}> Don't have an account?</div>
                     <div onClick={handleClick} className={"form-text change-cursor"}>
                         Click here to register
                     </div>
@@ -79,4 +92,3 @@ function Login() {
 }
 
 export default Login
-
