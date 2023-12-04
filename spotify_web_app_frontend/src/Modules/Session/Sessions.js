@@ -183,11 +183,11 @@ function Sessions() {
                 <button className="btn btn-success" onClick={handleSearch}>Search</button>
             </div>
             
-            <div class='container bg-dark bg-gradiant mt-4' className="tracks-query">
+            <div className="tracks-query container bg-dark mt-4">
                 {tracksReturnedFromQuery ? tracksReturnedFromQuery.map((t, index) => {
                     console.log("t", t)
                     return (
-                        <button class='btn btn-secondary me-1 mt-1'key={index} className={'track'} onClick={() => setItemToQueue(t.uri)}>
+                        <button class="btn btn-secondary me-1 mt-2" key={index} onClick={() => setItemToQueue(t.uri)}>
                             {t.name}
                         </button>
                     );
