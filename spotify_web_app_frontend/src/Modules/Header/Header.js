@@ -7,6 +7,7 @@ import logo from "../../Assets/Images/spotify connections-logos_white.png"
 import {React} from "react";
 import Button from "react-bootstrap/Button";
 import {useAuth} from "../Routing/AuthProvider";
+import 'bootstrap/dist/css/bootstrap.css';
 
 function Header() {
     const navigate = useNavigate()
@@ -28,33 +29,24 @@ function Header() {
     const renderNavBar = () => {
         if (!(route.path === '/login') && !(route.path === '/register')) {
             return (
-                <>
-                    <Nav.Link onClick={auth.logout}>
-                        Logout
-                    </Nav.Link>
-                    {/*<Nav.Link className={'nav-link'}>*/}
-                    {/*    Profile*/}
-                    {/*</Nav.Link>*/}
-                </>
+                <a class="nav-link active" onClick={auth.logout}>Logout</a>
             )
         }
         else {
             return (
-                <Nav.Link className={'nav-link'}>
-                    About Us
-                </Nav.Link>
+                <a class="nav-link active" onClick={auth.logout}>About Us</a>
             )
         }
     }
 
 
     return (
-        <Navbar expand={'lg'} className={'navbar-wrapper'} sticky={'top'}>
+        <nav class="navbar bg-body-tertiary nav-pills bg-dark" data-bs-theme="dark">
             <img src={logo} alt="Logo" className={"header-logo"}/>
-            <Container fluid className={'container'}>
+            <div class='nav-item'>
                 {renderNavBar()}
-            </Container>
-        </Navbar>
+            </div>
+        </nav>
     )
 }
 
