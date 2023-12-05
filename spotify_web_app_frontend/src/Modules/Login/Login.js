@@ -57,7 +57,7 @@ function Login() {
                     {showAlert && <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
                     {alertMessage}
                     </Alert>}
-                    Login
+                    Let's Start Listening
                 </div>
                 <Form.Group className={"login-group"}>
                     <Form.Label className={"form-text"}>Username</Form.Label>
@@ -76,7 +76,7 @@ function Login() {
                     />
                 </Form.Group>
                 <div className={"button-wrapper"}>
-                    <Button variant={"primary"} className={"form-button"} onClick={handleLogin}>
+                    <Button variant={"success"} className={"form-button"} onClick={handleLogin}>
                         Login
                     </Button>
                 </div>

@@ -3,6 +3,7 @@ import Login from '../Login/Login'
 import Connections from '../Connections/Connections'
 import Sessions from '../Session/Sessions'
 import Register from "../Register/Register";
+import AboutUs from "../AboutUs/AboutUs";
 const RenderRoutes = (isLoggedIn) => [
     {
         path: '/',
@@ -19,6 +20,10 @@ const RenderRoutes = (isLoggedIn) => [
     {
         path: '/register',
         element: !isLoggedIn ? <Register /> : <Navigate to={'/'} />
+    },
+    {
+        path: '/about',
+        element: <AboutUs />
     },
 
 ]
