@@ -3,5 +3,6 @@ from django.conf.urls import include
 from . import views
 
 urlpatterns = [
-    path('create-room/', views.create_room)
+    path('create-room/', views.create_room),
+    path('join-room/', views.join_room)
 ]

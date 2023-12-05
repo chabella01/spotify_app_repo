@@ -173,28 +173,39 @@ function Sessions() {
             </div>
             <h1 className="title">People in Session</h1>
             <h2>Session ID {location.state.sessionId}</h2>
-            <div>
-                <input
-                    type="text"
-                    placeholder="Enter search query"
-                    value={searchQuery}
-                    onChange={handleInputChange}
-                />
-                <button className="btn btn-success" onClick={handleSearch}>Search</button>
+            <div class="container-fluid overflow-hidden text-center">
+                <div class="row gx-5">
+                    <div class="col">
+                        <div>
+                            <input
+                                type="text"
+                                placeholder="Enter search query"
+                                value={searchQuery}
+                                onChange={handleInputChange}
+                            />
+                            <button className="btn btn-success" onClick={handleSearch}>Search</button>
+                        </div>
+                        <div className="tracks-query container bg-dark mt-4 mb-4">
+                            {tracksReturnedFromQuery ? tracksReturnedFromQuery.map((t, index) => {
+                                return (
+                                    <button class="me-1 mt-2 btn btn-secondary" key={index}  onClick={() => setItemToQueue(t.uri)}>
+                                        {t.name}
+                                    </button>
+                                );
+                            }) : null}
+                        </div>
+                    </div>
+                    <div class="col">
+                        <PlaybackComponent
+                        currentSongFromHost={songUriFromHost ? songUriFromHost : null}
+                        isHost={isHost}
+                    />
+                    </div>
+                </div>
             </div>
-            <div className="tracks-query container bg-dark mt-4 mb-4">
-                {tracksReturnedFromQuery ? tracksReturnedFromQuery.map((t, index) => {
-                    return (
-                        <button class="me-1 mt-2 btn btn-secondary" key={index}  onClick={() => setItemToQueue(t.uri)}>
-                            {t.name}
-                        </button>
-                    );
-                }) : null}
-            </div>
-            <PlaybackComponent
-                currentSongFromHost={songUriFromHost ? songUriFromHost : null}
-                isHost={isHost}
-            />
+            <h2>
+                Chat Box
+            </h2>
             {<div className="messages">
                 {messages.map((msg, index) => {
                     const isCurrentUser = msg.sender === currUser.username;

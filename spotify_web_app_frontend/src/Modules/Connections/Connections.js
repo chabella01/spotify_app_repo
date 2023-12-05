@@ -29,12 +29,17 @@ function Connections() {
     const getProfileData = () => {
         const profile = localStorage.getItem('profile')
 
-        const {display_name} = JSON.parse(profile)
+        const {display_name, images} = JSON.parse(profile)
 
         if(profile) {
             return (
-                <div>
-                    Welcome {display_name}
+                <div class="card text-bg-dark">
+                    <img class="rcard-img-top" src={images[0].url} alt=''/>
+                    <h2 class="card-title">
+                        Welcome {display_name}
+
+                    </h2>
+
                 </div>
             )
 
@@ -46,23 +51,25 @@ function Connections() {
             {getProfileData()}
                 <title>Spotify Page to create session button</title>
                 <link rel="stylesheet" href="connection_page_styles.css"/>
-            <div className={'form-container'}>
+            <form class="form-floating">
                 <label htmlFor="numericInput">Enter 4-digit Session ID:</label>
                 <input
                     type="number"
                     id="numericInput"
                     name="numericInput"
+                    class="form-control"
                     min="0"
                     max="9999"
                     maxLength="4"
                     onChange={handleChangeSessionId}
                 />
                 <button className={'session-button'}
-                    onClick={handleClickCreateSession}
+                    onClick={handleClickJoinSession}
                 >
                     Join Existing Session</button>
-                <button className={"session-button"}>Or Create A New Session</button>
-            </div>
+                <button className={"session-button"}
+                    onClick={handleClickCreateSession}>Or Create A New Session</button>
+            </form>
         </div>
 
     )
