@@ -41,4 +41,11 @@ api_view(['GET'])
 def join_room(request):
     # here a user will join an already existing room
         # add user to the room and return the room and all of its data
-    pass
+    user = request.user
+    if request.method == 'POST':
+        if SessionRoom.objects.filter(session_id=request.state).exists():
+            session = SessionRoom.objects.filter(session_id=request.state)
+            session.users.add(user)
+            session.save()
+            return Response({"data":session.data, "session_id": session.session_id}, status=status.HTTP_202_ACCEPTED)
+        return Response(session.errors, status=status.HTTP_400_BAD_REQUEST)

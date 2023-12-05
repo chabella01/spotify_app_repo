@@ -11,7 +11,10 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 function Header() {
     const navigate = useNavigate()
-
+    const handleClickNewSession = (e) => {
+        e.preventDefault()
+        navigate('/connections')
+    }
     const routes = [
         {path: '/connections'},
         {path: '/sessions'},
@@ -29,12 +32,17 @@ function Header() {
     const renderNavBar = () => {
         if (!(route.path === '/login') && !(route.path === '/register')) {
             return (
-                <a class="nav-link active" onClick={auth.logout}>Logout</a>
+                <>
+                <a class="nav-link" onClick={handleClickNewSession}>New Session</a>
+                <a class="nav-link" onClick={auth.logout}>About Us</a>
+                <a class="nav-link" onClick={auth.logout}>Logout</a>
+                
+                </>
             )
         }
         else {
             return (
-                <a class="nav-link active" onClick={auth.logout}>About Us</a>
+                <a class="nav-link" onClick={auth.logout}>About Us</a>
             )
         }
     }
