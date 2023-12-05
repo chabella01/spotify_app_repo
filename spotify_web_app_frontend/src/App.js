@@ -8,6 +8,7 @@ import Connections from "./Modules/Connections/Connections";
 import Login from "./Modules/Login/Login";
 import Register from "./Modules/Register/Register";
 import Layout from "./Modules/Layout/Layout";
+import AboutUs from './Modules/AboutUs/AboutUs';
 import CreateSession from "./Modules/CreateSession/CreateSession";
 import {useAuth} from "./Modules/Routing/AuthProvider";
 import {completeLogin, getAccessToken} from '../src/Modules/SpotifyHelpers/SpotifyHelpers'
@@ -46,6 +47,12 @@ function App() {
                     <ProtectedRoute>
                         <Sessions />
                     </ProtectedRoute>
+                }
+            />
+            <Route
+                path={'/about'}
+                element={
+                    <AboutUs />
                 }
             />
         </Route>

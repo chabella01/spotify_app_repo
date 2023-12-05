@@ -15,6 +15,10 @@ function Header() {
         e.preventDefault()
         navigate('/connections')
     }
+    const handleClickAboutUs = (e) => {
+        e.preventDefault()
+        navigate('/about')
+    }
     const routes = [
         {path: '/connections'},
         {path: '/sessions'},
@@ -22,7 +26,8 @@ function Header() {
         {path: '/register'},
         {path: '/create_session'},
         {path: '/'},
-        {path: '/callback'}
+        {path: '/callback'},
+        {path: '/about'}
 
     ]
     const auth = useAuth()
@@ -34,7 +39,7 @@ function Header() {
             return (
                 <>
                 <a class="nav-link" onClick={handleClickNewSession}>New Session</a>
-                <a class="nav-link" onClick={auth.logout}>About Us</a>
+                <a class="nav-link" onClick={handleClickAboutUs}>About Us</a>
                 <a class="nav-link" onClick={auth.logout}>Logout</a>
                 
                 </>
@@ -42,7 +47,7 @@ function Header() {
         }
         else {
             return (
-                <a class="nav-link" onClick={auth.logout}>About Us</a>
+                <a class="nav-link" onClick={handleClickAboutUs}>About Us</a>
             )
         }
     }
