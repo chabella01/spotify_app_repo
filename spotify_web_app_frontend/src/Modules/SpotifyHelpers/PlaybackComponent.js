@@ -122,11 +122,11 @@ function PlaybackComponent(props) {
                     <img src={current_track.album.images[0].url}
                      className="now-playing__cover" alt="" />
                     <div className="now-playing__side">
-                        <div className="now-playing__name">Track Name {
+                        <div className="now-playing__name">Track Name: {
                             current_track.name
                         }</div>
 
-                        <div className="now-playing__artist">Artist {
+                        <div className="now-playing__artist">Artist: {
                            current_track.artists[0].name
                         }</div>
 
@@ -148,22 +148,24 @@ function PlaybackComponent(props) {
         if (props.isHost) {
             return (
                 <>
-                    <button className="btn-spotify" onClick={() => { player.previousTrack() }} >
-                        &lt;&lt;
+                <div class="d-flex justify-content-center mb-4">
+                    <button className="btn-spotify" class="btn btn-outline-success me-1" onClick={() => { player.previousTrack() }} >
+                        Prev
                     </button>
 
-                    <button className="btn-spotify" onClick={() => { player.togglePlay() }} >
+                    <button className="btn-spotify" class="btn btn-outline-success me-1" onClick={() => { player.togglePlay() }} >
                         { is_paused ? "PLAY" : "PAUSE" }
                     </button>
 
-                    <button className="btn-spotify" onClick={() => { player.nextTrack() }} >
-                        &gt;&gt;
+                    <button className="btn-spotify" class="btn btn-outline-success me-1" onClick={() => { player.nextTrack() }} >
+                        Next
                     </button>
+                    </div>
                 </>
         )
         } else {
             return (
-                <div>Only host can manage playback</div>
+                <div class='mb-4'>Only host can manage playback</div>
             )
         }
 
@@ -171,12 +173,12 @@ function PlaybackComponent(props) {
 
     return (
         <>
-            <div className="container">
+            
                 <div className="main-wrapper">
                    <RenderArtistImage />
                     <RenderButtons />
                 </div>
-            </div>
+            
         </>
     );
 }

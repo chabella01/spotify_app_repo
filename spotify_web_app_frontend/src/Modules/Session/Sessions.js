@@ -4,6 +4,7 @@ import Form from 'react-bootstrap/Form'
 import {useLocation} from "react-router-dom";
 import pfp from '../../Assets/Images/pfp_demo.png'
 import './Sessions.css'
+import 'bootstrap/dist/css/bootstrap.css'
 import {
     fetchCurrentSong,
     getCurrentDeviceId,
@@ -163,9 +164,9 @@ function Sessions() {
 
 
     return (
-        <div className={'session-container'}>
+        <div className={'container-fluid'}>
             <div>
-                Host: {host}
+                <h1>Host: {host}</h1>
             </div>
             <div>
                 CURRENT USER: {currUser.username}
@@ -179,12 +180,12 @@ function Sessions() {
                     value={searchQuery}
                     onChange={handleInputChange}
                 />
-                <button onClick={handleSearch}>Search</button>
+                <button className="btn btn-success" onClick={handleSearch}>Search</button>
             </div>
-            <div className="tracks-query">
+            <div className="tracks-query container bg-dark mt-4 mb-4">
                 {tracksReturnedFromQuery ? tracksReturnedFromQuery.map((t, index) => {
                     return (
-                        <button key={index} className={'track'} onClick={() => setItemToQueue(t.uri)}>
+                        <button class="me-1 mt-2 btn btn-secondary" key={index}  onClick={() => setItemToQueue(t.uri)}>
                             {t.name}
                         </button>
                     );
