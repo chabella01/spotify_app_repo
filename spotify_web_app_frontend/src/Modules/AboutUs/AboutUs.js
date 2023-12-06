@@ -3,6 +3,7 @@ import './AboutUs.css'
 import {useNavigate} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import pfp from "../../Assets/Images/pfp_demo.png"
+import taing from "../../Assets/Images/taing.png"
 
 function AboutUs() {
     return (
@@ -29,7 +30,7 @@ function AboutUs() {
                 </div>
             </div>
             <div class="card">
-                <img class="card-img-top" src={pfp} alt="Card image cap"/>
+                <img class="card-img-top" src={taing} alt="Card image cap"/>
                 <div class="card-body">
                 <h5 class="card-title">Justin</h5>
                 <p class="card-text">Computer Engineer.</p>
