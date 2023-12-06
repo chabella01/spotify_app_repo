@@ -6,7 +6,6 @@
     justify-content: center;
     background-color: #333;
     color: white;
-<<<<<<< HEAD
     /*height: 200vh;*/
 }
 .search-container{
@@ -21,11 +20,9 @@
     bottom: 0;
     padding: 20px;
     height: auto;
-=======
     justify-content: center;
 
     
->>>>>>> main
 }
 .title {
     font-size: 24px;
@@ -44,9 +41,7 @@
 h2 {
     font-size: 16px;
 }
-<<<<<<< HEAD
 
-=======
 .container {
     display: inline-block;
     background-color: #333;
@@ -57,7 +52,6 @@ h2 {
     height: 100vh;
     padding: 20px;
 }
->>>>>>> main
 
 /* Styles for individual messages */
 .message {
