@@ -32,6 +32,7 @@
 }
 
 .login-group label {
+    color: #fff;
     display: block;
     font-weight: bold;
     margin: 3px;
@@ -45,8 +46,8 @@
 }
 
 .form-text {
-    color: #fff;
     margin: 20px;
+    font-weight: bold
 }
 
                                                        /* CSS */
@@ -80,6 +81,7 @@
     flex-direction: row;
     border-top: 1px solid white;
     margin: 10px;
+
 }
 
 .sub-font-color {
@@ -94,4 +96,5 @@
     color: #fff;
     font-size: large;
     margin: 20px;
+    font-weight: bolder;
 }
