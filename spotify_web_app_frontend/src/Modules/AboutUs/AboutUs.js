@@ -5,9 +5,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function AboutUs() {
     return (
-        // <h1>
-        // About Us
-        // </h1>
 
         <div class="card-group">
             <div class="card">
