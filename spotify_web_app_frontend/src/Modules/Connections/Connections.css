@@ -6,20 +6,24 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-evenly;
-}
-.center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
+    justify-content: space-evenly; /* Center vertically */
 }
 
 .form-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; /* Center horizontally */
+    margin: 50px;
+}
+
+.rcard-img-top {
+    height: 20vh;
+    width: 10vw;
+}
+
+.input-error {
+    color: red;
+    margin: 20px;
 }
 
 #numericInput {
@@ -28,21 +32,18 @@
     background-color: #191414;
     color: #fff;
     border: 1px solid white;
-
     margin: 10px;
 }
 
 .session-button {
-    display: inline-block;
-    background-color: #1DB954; /* Spotify green */
-    color: #fff; /* White text */
+    background-color: #1DB954;
+    color: #fff;
     padding: 10px 20px;
-    border-radius: 30px; /* Rounded corners */
-    font-size: 16px;
+    border-radius: 30px;
+    font-size: 14px;
     text-decoration: none;
     text-align: center;
     cursor: pointer;
     transition: background-color 0.3s;
     margin: 10px;
 }
-/*change later based on what other pages look like*/

@@ -2,25 +2,42 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     background-color: #333;
     color: white;
-    
+    /*height: 200vh;*/
+}
+.search-container{
+    /*display: flex;*/
+    /*flex-direction: row;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
+    background-color: #2C2C2C;
+
+    position: relative;
+    left: 0;
+    bottom: 0;
+    padding: 20px;
+    height: auto;
 }
 .title {
     font-size: 24px;
     /*color: #333; !* Dark text color *!*/
 }
 
+.header{
+
+    display: flex;
+    align-items: flex-start;
+    background-color: #1b1b1b;
+    color: white;
+    padding: 10px;
+}
+
 h2 {
     font-size: 16px;
 }
 
-.chat-room {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    padding: 20px;
-}
 
 /* Styles for individual messages */
 .message {
@@ -58,23 +75,55 @@ h2 {
     height: 10px;
 }
 
-.tracks-query {
+.playback-container {
+    display: flex;
+    justify-content: center;
+    background-color: #1b1b1b;
     color: white;
-    border-radius: 5px;
-    background-color: black;
+    padding: 20px;
 }
 
-.messages {
+.tracks-query {
+    color: white;
+    /*border-radius: 5px;*/
+    background-color: #444444;
+    /*display: flex;*/
+    /*flex-direction: row;*/
+    overflow-x:auto ;
     overflow-y: auto;
-    display: flex;
-    /*justify-content: center;*/
-    /*align-items: flex-end;*/
-    flex-direction: column;
+    /*flex: 0 0 auto;*/
+    width: 700px;
+
+}
+
+.messages-container {
+    position: fixed;
+    bottom: 0;
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*justify-content: flex-start;*/
+    /*align-items: center;*/
+}
+.messages {
     padding: 10px;
     border-radius: 5px;
-    background-color: #f9f9f9;
-    margin-bottom: 20px;
-    width: 50%;
+    background-color: #7F8177;
+    margin: 50px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    top: 70px;
+    width: 20vw;
+    overflow-y:auto;
+}
+
+.input-area {
+    position: absolute;
+    bottom: 0;
+    width: 100%; /* Take the full width of the container */
+    background-color: #7F8177;
+    padding: 10px;
+    border-top: 1px solid #ccc;
 }
 .person {
     display: flex;
