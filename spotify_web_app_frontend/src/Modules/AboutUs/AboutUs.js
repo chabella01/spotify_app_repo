@@ -11,7 +11,8 @@ import christian from "../../Assets/Images/christian.png"
 
 function AboutUs() {
     return (
-
+        <div class="container-fluid bg-dark">
+        <h2>Meet the team!</h2>
         <div class="card-group">
             <div class="card">
                 <img class="card-img-top" src={pfp} alt="Card image cap"/>
@@ -62,6 +63,7 @@ function AboutUs() {
                 <div class="card-footer">
                 <small class="text-muted">Last updated 3 mins ago</small>
                 </div>
+            </div>
             </div>
             </div>
 

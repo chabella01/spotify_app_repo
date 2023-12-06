@@ -25,3 +25,17 @@
 .about-us-card .card-text {
     color: #555; /* Example color */
 }
+
+.card-group {
+
+    background-color: #333;
+}
+
+.container-fluid {
+    width: 100vh;
+    height: 75vh;
+    background-color: #333;
+}
+body {
+    background-color: #333;
+}
