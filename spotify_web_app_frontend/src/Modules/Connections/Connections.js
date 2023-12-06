@@ -1,6 +1,7 @@
 import {React, useState} from 'react'
 import './Connections.css'
 import {useNavigate} from "react-router-dom";
+import pfp_demo from '../../Assets/Images/pfp_demo.png'
 
 function Connections() {
 
@@ -27,15 +28,15 @@ function Connections() {
     }
 
     const getProfileData = () => {
-        const profile = localStorage.getItem('profile')
+        const profile = sessionStorage.getItem('profile')
 
         const {display_name, images} = JSON.parse(profile)
 
         if(profile) {
             return (
                 <div class="card text-bg-dark">
-                    <img class="rcard-img-top" src={images[0].url} alt=''/>
-                    <h2 class="card-title">
+                    <img className={"rcard-img-top"} src={images.length === 0 ? pfp_demo : images[0].url}/>
+                    <h2 className={"card-title"}>
                         Welcome {display_name}
 
                     </h2>
@@ -43,6 +44,8 @@ function Connections() {
                 </div>
             )
 
+        } else {
+            return <div>no profule</div>
         }
     }
 
