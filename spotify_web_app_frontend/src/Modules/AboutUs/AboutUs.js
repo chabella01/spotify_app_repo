@@ -4,6 +4,10 @@ import {useNavigate} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import pfp from "../../Assets/Images/pfp_demo.png"
 import taing from "../../Assets/Images/taing.png"
+import steven from "../../Assets/Images/steven.png"
+import christian from "../../Assets/Images/christian.png"
+
+
 
 function AboutUs() {
     return (
@@ -20,7 +24,7 @@ function AboutUs() {
                 </div>
             </div>
             <div class="card">
-                <img class="card-img-top" src={pfp} alt="Card image cap"/>
+                <img class="card-img-top" src={christian} alt="Card image cap"/>
                 <div class="card-body">
                 <h5 class="card-title">Christian</h5>
                 <p class="card-text">Computer Engineer.</p>
@@ -50,7 +54,7 @@ function AboutUs() {
                 </div>
             </div>
             <div class="card">
-                <img class="card-img-top" src={pfp} alt="Card image cap"/>
+                <img class="card-img-top" src={steven} alt="Card image cap"/>
                 <div class="card-body">
                 <h5 class="card-title">Steven</h5>
                 <p class="card-text">Computer Engineer and Car Enthusiast.</p>
