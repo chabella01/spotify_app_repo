@@ -6,7 +6,7 @@ import pfp from "../../Assets/Images/pfp_demo.png"
 import taing from "../../Assets/Images/taing.png"
 import steven from "../../Assets/Images/steven.png"
 import christian from "../../Assets/Images/christian.png"
-
+import david from "../../Assets/Images/david.png"
 
 
 function AboutUs() {
@@ -44,7 +44,7 @@ function AboutUs() {
                 </div>
             </div>
             <div class="card">
-                <img class="card-img-top" src={pfp} alt="Card image cap"/>
+                <img class="card-img-top" src={david} alt="Card image cap"/>
                 <div class="card-body">
                 <h5 class="card-title">David</h5>
                 <p class="card-text">Computer Engineer.</p>
