@@ -14,6 +14,7 @@ import {useAuth} from "./Modules/Routing/AuthProvider";
 import {completeLogin, getAccessToken} from '../src/Modules/SpotifyHelpers/SpotifyHelpers'
 import Callback from '../src/Modules/Callback/Callback'
 import Sessions from "./Modules/Session/Sessions";
+import Four04Error from "./404_Error/Four04Error";
 function App() {
 
 
@@ -25,6 +26,7 @@ function App() {
             <Route path = '/register' element={<Register/>}/>
             <Route path = '/' element={<Navigate to={'/login'}/>}/>
             <Route path = '/callback' element={<Callback />}/>
+            <Route path = '*' element={<Four04Error />}/>
             <Route
                 path={'/connections'}
                 element={
