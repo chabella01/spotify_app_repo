@@ -1,7 +1,7 @@
 import {React, useEffect, useState} from 'react'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import pfp from '../../Assets/Images/pfp_demo.png'
 import './Sessions.css'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -13,7 +13,6 @@ import {
     setCurrentDeviceId,
     setCurrentSong, setItemToQueue
 } from "../SpotifyHelpers/SpotifyHelpers"
-import data from "bootstrap/js/src/dom/data";
 import PlaybackComponent  from '../SpotifyHelpers/PlaybackComponent'
 function Sessions() {
     const location = useLocation()
@@ -32,6 +31,12 @@ function Sessions() {
     const [searchQuery, setSearchQuery] = useState('');
     const [tracksReturnedFromQuery, setTracksReturnedFromQuery] = useState([])
     const [firstRender, setFirstRender] = useState(false)
+    const [clickedAddToQueue, setClickedAddToQueue] = useState(false)
+    const [allowedToQueue, setAllowedToQueue] = useState(true)
+    const [killPlayer, setKillPlayer] = useState(false);
+
+    const navigate = useNavigate()
+
     function isOpen(ws) { return ws.readyState === ws.OPEN }
     const handleInputChange = (event) => {
         setSearchQuery(event.target.value);
@@ -41,6 +46,9 @@ function Sessions() {
         console.log(songs.items)
         setTracksReturnedFromQuery(songs.tracks.items)
     };
+
+
+
     useEffect(() => {
         const fetchData = async () => {
             // we only wanna fetch the current song for the host
@@ -70,7 +78,6 @@ function Sessions() {
                     const uri =  songUriFromHost
                     const uri_arr = [uri]
                     const response_set = await setCurrentSong(uri)
-                console.log("RESONSE SET: ", response_set)
             }
         }, 3000);
 
@@ -86,19 +93,21 @@ function Sessions() {
         const userObj = JSON.parse(user)
         setCurrUser(userObj.user)
         // console.log(userObj.user.id)
-        const socket = new WebSocket(
-            `ws://127.0.0.1:8000/ws/room/${location.state.sessionId}/${userObj.user.id}`) // Replace with your WebSocket URL
-        setSocket(socket)
+        let socket = null
+        const createSocket = () => {
+            socket = new WebSocket(
+                `ws://127.0.0.1:8000/ws/room/${location.state.sessionId}/${userObj.user.id}`)
+            setSocket(socket)
+        }
+
+        createSocket()
+
         socket.onopen = () => {
-            // const message = `${userObj.user.username} has joined the server`
-            // if (currUser !== undefined) {
-            //     socket.send(JSON.stringify({ type: 'message', message: message, sender: userObj.user.username}))
-            // }
+
         }
 
         socket.onmessage = (event) => {
             const message = JSON.parse(event.data)
-            console.log("MESSAGE ", message)
             if ('host' in message) {
                 setHost(message.host)
                 if (userObj.user.username === message.host) {
@@ -107,8 +116,9 @@ function Sessions() {
                 }
             }
             if ('uri' in message) {
-                console.log('uri in onmessage', message.uri)
-                setSongUriFromHost(message.uri)
+                if (songUriFromHost !== message.uri) {
+                    setSongUriFromHost(message.uri)
+                }
             }
             if ('message' in message) {
                 setMessages(prevMessages => [...prevMessages, message])
@@ -119,18 +129,15 @@ function Sessions() {
             }
         }
 
-
         socket.onclose = (event) => {
-            console.log('WebSocket disconnected:', event.code, event.reason)
-        }
+            setKillPlayer(true);
+            console.log('WebSocket disconnected:', event.code, event.reason);
+            setTimeout(createSocket, 3000); // Reconnect after 3 seconds
+        };
         return () => {
             socket.close()
         }
     }, [])
-
-    // useEffect(() => {
-    //     console.log("in use eff", tracksReturnedFromQuery)
-    // }, [tracksReturnedFromQuery])
 
     const sendMessage = () => {
         if (!isOpen(socket)){
@@ -153,6 +160,18 @@ function Sessions() {
         }
     };
 
+    const sendItemToHostQueue = (t) => {
+
+        if (socket && inputMessage.trim() !== '') {
+            const message = {
+                queue_track: t.uri,
+                sender: currUser.username
+            };
+            socket.send(JSON.stringify(message))
+            setInputMessage('')
+        }
+    };
+
     const addTrackToQueue = async (uri) => {
             // add track to queue with spotify api call
             const response  = await setItemToQueue(uri)
@@ -162,22 +181,43 @@ function Sessions() {
             console.log(response)
     }
 
+    const handleAddToQueue = async (t) => {
+        // const click = clickedAddToQueue
+        console.log(t.uri)
+        setAllowedToQueue(true)
+        await setItemToQueue(t.uri);
+
+        setTimeout(function() {
+            setClickedAddToQueue(false)
+        }, 2000);
+    };
+
 
     return (
-        <div className={'container-fluid text-center bg-dark'}>
-
-            <div class="container-fluid text-center">
-            <div>
-                <h1>Host: {host}</h1>
+        <>
+            <div className="header">
+                <div className="session-info">
+                    <h3>Session ID:</h3>
+                    <p> {location.state.sessionId}</p>
+                    <div>
+                        <h4>Host: {host}</h4>
+                    </div>
+                </div>
             </div>
-            <div>
-                CURRENT USER: {currUser.username}
+        <div >
+            <div className={"playback-container"}>
+                <PlaybackComponent
+                    currentSongFromHost={songUriFromHost ? songUriFromHost : null}
+                    isHost={isHost}
+                    killPlayer={killPlayer}
+                />
             </div>
-            <h1 className="title">People in Session</h1>
-            <h2>Session ID {location.state.sessionId}</h2>
-                <div class="row gx-5">
-                    <div class="col">
-                        <div>
+        <div className={'search-container'}>
+                        {
+                            clickedAddToQueue ? 'Song Added To Queue' : null
+                        }
+                        {isHost &&
+                            <div>
                             <input
                                 type="text"
                                 placeholder="Enter search query"
@@ -185,62 +225,48 @@ function Sessions() {
                                 onChange={handleInputChange}
                             />
                             <button className="btn btn-success" onClick={handleSearch}>Search</button>
-                        </div>
-                        <div className="tracks-query container bg-dark mt-4 mb-4">
-                            {tracksReturnedFromQuery ? tracksReturnedFromQuery.map((t, index) => {
+                        </div> }
+                        {isHost &&
+                        <div className="tracks-query">
+                            {tracksReturnedFromQuery.length !==0 ? tracksReturnedFromQuery.map((t, index) => {
                                 return (
-                                    <button class="me-1 mt-2 btn btn-secondary" key={index}  onClick={ () => addTrackToQueue(t.uri)}>
+                                    <button
+                                        class="me-1 mt-2 btn btn-secondary" key={index}  onClick={() => handleAddToQueue(t)}>
+
                                         {t.name}
+                                        <br />
+                                        By: {t.artists[0].name}
                                     </button>
                                 );
                             }) : null}
-                        </div>
-                    </div>
-                    <div class="col">
-                        <PlaybackComponent
-                        currentSongFromHost={songUriFromHost ? songUriFromHost : null}
-                        isHost={isHost}
-                    />
-                    </div>
-                </div>
-            <h2>
-                Chat Box
-            </h2>
-            {<div className="messages">
-                {messages.map((msg, index) => {
-                    const isCurrentUser = msg.sender === currUser.username;
-                    console.log(messages)
-                    return (
-                        <div key={index} className={isCurrentUser ? 'message-curr-user' : 'message'}>
-                            <div className={isCurrentUser ? 'sender-text-curr-user' : 'sender-text'}>
-                                {msg.sender}
+                        </div>}
+        </div>
+
+        </div>
+                {<div className="messages">
+                    {messages.map((msg, index) => {
+                        const isCurrentUser = msg.sender === currUser.username;
+                        return (
+                            <div key={index} className={isCurrentUser ? 'message-curr-user' : 'message'}>
+                                <div className={isCurrentUser ? 'sender-text-curr-user' : 'sender-text'}>
+                                    {msg.sender}
+                                </div>
+                                <div>{msg.message}</div>
                             </div>
-                            <div>{msg.message}</div>
-                        </div>
-                    );
-                })}
-            </div>}
-            <div className="input-area">
-                <input
-                    type="text"
-                    value={inputMessage}
-                    onChange={(e) => setInputMessage(e.target.value)}
-                />
-                <button onClick={sendMessage}>Send</button>
-            </div>
-            </div>
-            <div class="toast-container position-fixed bottom-0 end-0 p-3">
-                <div id="liveToast" class="toast text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        );
+                    })}
+                    <div className="input-area">
+                        <input
+                            type="text"
+                            value={inputMessage}
+                            onChange={(e) => setInputMessage(e.target.value)}
+                        />
+                        <button onClick={sendMessage}>Send</button>
                     </div>
-                    <div class="toast-body">
-                    Song Added to Queue!
-                    </div>
-                </div>
-                </div>
-            </div>
-        
+                </div>}
+
+    </>
+
     )
 }
 

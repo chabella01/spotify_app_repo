@@ -10,6 +10,7 @@ import {useAuth} from "../Routing/AuthProvider";
 import 'bootstrap/dist/css/bootstrap.css';
 
 function Header() {
+    const auth = useAuth()
     const navigate = useNavigate()
     const handleClickNewSession = (e) => {
         e.preventDefault()
@@ -19,6 +20,19 @@ function Header() {
         e.preventDefault()
         navigate('/about')
     }
+
+    const handleClickHeader = (e) => {
+        e.preventDefault()
+        if (auth.user) {
+            navigate('/connections')
+        } else {
+            navigate('/login')
+        }
+    }
+    const handleClickLogin= (e) => {
+        e.preventDefault()
+        navigate('/login')
+    }
     const routes = [
         {path: '/connections'},
         {path: '/sessions'},
@@ -27,15 +41,20 @@ function Header() {
         {path: '/create_session'},
         {path: '/'},
         {path: '/callback'},
-        {path: '/about'}
+        {path: '/about'},
+        {path: '*'}
 
     ]
-    const auth = useAuth()
 
     const location = useLocation()
     const [{route}] = matchRoutes(routes, location)
     const renderNavBar = () => {
-        if (!(route.path === '/login') && !(route.path === '/register')) {
+        if (route.path === '/about' && !auth.user) {
+            return (
+                <a className="nav-link" onClick={handleClickLogin}>Login</a>
+            )
+        }
+        else if (!(route.path === '/login') && !(route.path === '/register')&& !(route.path === '*')){
             return (
                 <>
                 <a class="nav-link" onClick={handleClickNewSession}>New Session</a>
@@ -55,7 +74,7 @@ function Header() {
 
     return (
         <nav class="navbar bg-body-tertiary nav-pills bg-dark" data-bs-theme="dark">
-            <img src={logo} alt="Logo" className={"header-logo"}/>
+            <img src={logo} alt="Logo" className={"header-logo"} onClick={handleClickHeader}/>
             <div class='nav-item'>
                 {renderNavBar()}
             </div>
