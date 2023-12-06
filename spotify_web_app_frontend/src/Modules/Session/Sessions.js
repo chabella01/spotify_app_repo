@@ -5,6 +5,7 @@ import {useLocation} from "react-router-dom";
 import pfp from '../../Assets/Images/pfp_demo.png'
 import './Sessions.css'
 import 'bootstrap/dist/css/bootstrap.css'
+import { Toast } from 'bootstrap';
 import {
     fetchCurrentSong,
     getCurrentDeviceId,
@@ -153,18 +154,19 @@ function Sessions() {
     };
 
     const addTrackToQueue = async (uri) => {
-        if (isHost) {
             // add track to queue with spotify api call
             const response  = await setItemToQueue(uri)
+            const toastLive = document.getElementById('liveToast')
+            const toast = Toast.getOrCreateInstance(toastLive)
+            toast.show()
             console.log(response)
-        } else {
-            // send socket message to room if the host receives it make
-        }
     }
 
 
     return (
-        <div className={'container-fluid'}>
+        <div className={'container-fluid text-center bg-dark'}>
+
+            <div class="container-fluid text-center">
             <div>
                 <h1>Host: {host}</h1>
             </div>
@@ -173,7 +175,6 @@ function Sessions() {
             </div>
             <h1 className="title">People in Session</h1>
             <h2>Session ID {location.state.sessionId}</h2>
-            <div class="container-fluid overflow-hidden text-center">
                 <div class="row gx-5">
                     <div class="col">
                         <div>
@@ -188,7 +189,7 @@ function Sessions() {
                         <div className="tracks-query container bg-dark mt-4 mb-4">
                             {tracksReturnedFromQuery ? tracksReturnedFromQuery.map((t, index) => {
                                 return (
-                                    <button class="me-1 mt-2 btn btn-secondary" key={index}  onClick={() => setItemToQueue(t.uri)}>
+                                    <button class="me-1 mt-2 btn btn-secondary" key={index}  onClick={ () => addTrackToQueue(t.uri)}>
                                         {t.name}
                                     </button>
                                 );
@@ -202,7 +203,6 @@ function Sessions() {
                     />
                     </div>
                 </div>
-            </div>
             <h2>
                 Chat Box
             </h2>
@@ -228,7 +228,19 @@ function Sessions() {
                 />
                 <button onClick={sendMessage}>Send</button>
             </div>
-        </div>
+            </div>
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                <div id="liveToast" class="toast text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                    Song Added to Queue!
+                    </div>
+                </div>
+                </div>
+            </div>
+        
     )
 }
 
