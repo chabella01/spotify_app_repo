@@ -79,7 +79,7 @@ function Register() {
     const handleRegister = async () => {
         try {
             if (password === '' || email === '' || password == '' || username === '') {
-                console.log('please fill out all required information ')
+                alert('please fill out all required information ')
             } else {
                 const response = await axios.post(base_url + 'register', {
                     username: username,

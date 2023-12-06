@@ -5,16 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f002b277-2da5-4ab5-a920-6d9a3f7620f4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/spotify_app_backend/spotify_backend/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/spotify_app_backend/spotify_backend/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spotify_web_app_frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/spotify_web_app_frontend/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/Connections/Connections.css" beforeDir="false" afterPath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/Connections/Connections.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/Connections/Connections.js" beforeDir="false" afterPath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/Connections/Connections.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/Header/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/Header/Header.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/Register/Register.js" beforeDir="false" afterPath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/Register/Register.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/Session/Sessions.css" beforeDir="false" afterPath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/Session/Sessions.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/Session/Sessions.js" beforeDir="false" afterPath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/Session/Sessions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/SpotifyHelpers/PlaybackComponent.css" beforeDir="false" afterPath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/SpotifyHelpers/PlaybackComponent.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/SpotifyHelpers/PlaybackComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/spotify_web_app_frontend/src/Modules/SpotifyHelpers/PlaybackComponent.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

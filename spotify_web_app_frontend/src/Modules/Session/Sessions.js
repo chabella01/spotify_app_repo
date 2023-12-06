@@ -5,6 +5,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import pfp from '../../Assets/Images/pfp_demo.png'
 import './Sessions.css'
 import 'bootstrap/dist/css/bootstrap.css'
+import { Toast } from 'bootstrap';
 import {
     fetchCurrentSong,
     getCurrentDeviceId,
@@ -172,13 +173,12 @@ function Sessions() {
     };
 
     const addTrackToQueue = async (uri) => {
-        if (isHost) {
             // add track to queue with spotify api call
             const response  = await setItemToQueue(uri)
+            const toastLive = document.getElementById('liveToast')
+            const toast = Toast.getOrCreateInstance(toastLive)
+            toast.show()
             console.log(response)
-        } else {
-            // send socket message to room if the host receives it make
-        }
     }
 
     const handleAddToQueue = async (t) => {
@@ -232,6 +232,7 @@ function Sessions() {
                                 return (
                                     <button
                                         class="me-1 mt-2 btn btn-secondary" key={index}  onClick={() => handleAddToQueue(t)}>
+
                                         {t.name}
                                         <br />
                                         By: {t.artists[0].name}
@@ -265,6 +266,7 @@ function Sessions() {
                 </div>}
 
     </>
+
     )
 }
 
