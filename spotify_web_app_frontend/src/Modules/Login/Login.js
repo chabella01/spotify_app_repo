@@ -7,6 +7,7 @@ import logo from "../../Assets/Images/spotify connections-logos_transparent.png"
 import axios from "axios";
 import {useAuth} from "../Routing/AuthProvider";
 import Alert from 'react-bootstrap/Alert';
+import 'bootstrap/dist/css/bootstrap.min.css';
 function Login() {
 
     const base_url = 'http://127.0.0.1:8000/'
@@ -53,7 +54,7 @@ function Login() {
     return (
         <div className={'login-wrapper'}>
             <Form className={"form-wrapper"}>
-                <div className={'header-login'}>
+                <div className={'header-login text-success'}>
                     {showAlert && <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
                     {alertMessage}
                     </Alert>}
@@ -82,7 +83,7 @@ function Login() {
                 </div>
                 <div className={'register-wrapper'}>
                     <div className={"form-text sub-font-color"}> Don't have an account?</div>
-                    <div onClick={handleClick} className={"form-text change-cursor"}>
+                    <div onClick={handleClick} className={"form-text change-cursor text-success"}>
                         Click here to register
                     </div>
                 </div>
