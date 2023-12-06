@@ -4,7 +4,14 @@ import Form from 'react-bootstrap/Form'
 import {useLocation} from "react-router-dom";
 import pfp from '../../Assets/Images/pfp_demo.png'
 import './Sessions.css'
-import {fetchCurrentSong, playCurrentSong, setCurrentSong} from "../SpotifyHelpers/SpotifyHelpers"
+import 'bootstrap/dist/css/bootstrap.css'
+import {
+    fetchCurrentSong,
+    getCurrentDeviceId,
+    playCurrentSong, searchSongs,
+    setCurrentDeviceId,
+    setCurrentSong, setItemToQueue
+} from "../SpotifyHelpers/SpotifyHelpers"
 import data from "bootstrap/js/src/dom/data";
 import PlaybackComponent  from '../SpotifyHelpers/PlaybackComponent'
 function Sessions() {
@@ -20,34 +27,49 @@ function Sessions() {
     const [songPlaying, setSongPlaying] = useState(false)
     const [host, setHost] = useState(null)
     const [isHost, setIsHost] = useState(false)
-
+    const [songUriFromHost, setSongUriFromHost] = useState(null)
+    const [searchQuery, setSearchQuery] = useState('');
+    const [tracksReturnedFromQuery, setTracksReturnedFromQuery] = useState([])
+    const [firstRender, setFirstRender] = useState(false)
+    function isOpen(ws) { return ws.readyState === ws.OPEN }
+    const handleInputChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
+    const handleSearch = async () => {
+        const songs = await searchSongs(searchQuery)
+        console.log(songs.items)
+        setTracksReturnedFromQuery(songs.tracks.items)
+    };
     useEffect(() => {
         const fetchData = async () => {
+            // we only wanna fetch the current song for the host
+            // else wait for the host to start a song
+            // show paused if the host isnt playing anything
             const data = await fetchCurrentSong()
-            console.log("song data: ", data)
             return data
         }
 
         const intId = setInterval(async () => {
-            const response = await fetchData()
-            if (response === -1) {
-                setSongPlaying(false)
-            } else {
-                setCurrentSongData(response)
-                if (socket && currentSongData && isHost) {
-                // if the user is the host then send what track they are playing to
-                    // the rest of everyone every 3 seconds
-                    const songData = {
-                        song: response.item.track,
-                        uri: response.item.uri
-                    };
-                    socket.send(JSON.stringify(songData))
+            if (isHost) {
+                const response = await fetchData()
+                if (response === -1) {
+                    setSongPlaying(false)
+                } else {
+                    if (isOpen(socket)){
+                            const songData = {
+                                // type: 'uri',
+                                sender: currUser.id,
+                                uri: response.item.uri
+                            }
+                            socket.send(JSON.stringify(songData))
+                    }
                 }
-                else if (socket && currentSongData && !isHost) {
-                    const uri =  currentSongData.item.uri
-                    console.log(uri)
-                    await setCurrentSong(uri)
-                }
+            }
+            else if (!isHost && isOpen(socket)){
+                    const uri =  songUriFromHost
+                    const uri_arr = [uri]
+                    const response_set = await setCurrentSong(uri)
+                console.log("RESONSE SET: ", response_set)
             }
         }, 3000);
 
@@ -55,11 +77,11 @@ function Sessions() {
             clearInterval(intId)
         }
 
-    }, [fetchMoreData])
+    }, [socket, isHost, currentSongData])
 
 
     useEffect(() => {
-        const user = localStorage.getItem('user')
+        const user = sessionStorage.getItem('user')
         const userObj = JSON.parse(user)
         setCurrUser(userObj.user)
         // console.log(userObj.user.id)
@@ -67,14 +89,15 @@ function Sessions() {
             `ws://127.0.0.1:8000/ws/room/${location.state.sessionId}/${userObj.user.id}`) // Replace with your WebSocket URL
         setSocket(socket)
         socket.onopen = () => {
-            const message = `${userObj.user.username} has joined the server`
-            if (currUser !== undefined) {
-                socket.send(JSON.stringify({ type: 'message', message: message, sender: userObj.user.username}))
-            }
+            // const message = `${userObj.user.username} has joined the server`
+            // if (currUser !== undefined) {
+            //     socket.send(JSON.stringify({ type: 'message', message: message, sender: userObj.user.username}))
+            // }
         }
+
         socket.onmessage = (event) => {
             const message = JSON.parse(event.data)
-            // console.log(message)
+            console.log("MESSAGE ", message)
             if ('host' in message) {
                 setHost(message.host)
                 if (userObj.user.username === message.host) {
@@ -82,54 +105,107 @@ function Sessions() {
                     console.log('user is host')
                 }
             }
-            setMessages(prevMessages => [...prevMessages, message])
+            if ('uri' in message) {
+                console.log('uri in onmessage', message.uri)
+                setSongUriFromHost(message.uri)
+            }
+            if ('message' in message) {
+                setMessages(prevMessages => [...prevMessages, message])
+            }
+            if ('past_messages' in message && !firstRender) {
+                setMessages(prevMessages => [...prevMessages, message])
+                setFirstRender(true)
+            }
         }
+
+
         socket.onclose = (event) => {
             console.log('WebSocket disconnected:', event.code, event.reason)
         }
         return () => {
             socket.close()
         }
-    }, [dataFetched])
+    }, [])
 
-    useEffect(() => {
-        // console.log(currentSongData.item.name)
-    }, [currentSongData])
+    // useEffect(() => {
+    //     console.log("in use eff", tracksReturnedFromQuery)
+    // }, [tracksReturnedFromQuery])
 
     const sendMessage = () => {
+        if (!isOpen(socket)){
+            const user = sessionStorage.getItem('user')
+            const userObj = JSON.parse(user)
+            setCurrUser(userObj.user)
+            // console.log(userObj.user.id)
+            const socket = new WebSocket(
+                `ws://127.0.0.1:8000/ws/room/${location.state.sessionId}/${userObj.user.id}`) // Replace with your WebSocket URL
+            setSocket(socket)
+        }
+
         if (socket && inputMessage.trim() !== '') {
             const message = {
                 message: inputMessage,
                 sender: currUser.username
-                // Add additional properties if needed (e.g., user info, timestamps)
             };
             socket.send(JSON.stringify(message))
             setInputMessage('')
         }
     };
 
-    const butPlayCurrentSong = async () => {
-       try {
-           const data = await playCurrentSong()
-           // if (data === -1) {
-           //     console.error(data)
-           // }
-           console.log('pressed')
-       } catch(e) {
-           console.error(e)
-       }
+    const addTrackToQueue = async (uri) => {
+        if (isHost) {
+            // add track to queue with spotify api call
+            const response  = await setItemToQueue(uri)
+            console.log(response)
+        } else {
+            // send socket message to room if the host receives it make
+        }
     }
+
+
     return (
-        <div className={'session-container'}>
+        <div className={'container-fluid'}>
             <div>
-                Host: {host}
+                <h1>Host: {host}</h1>
+            </div>
+            <div>
+                CURRENT USER: {currUser.username}
             </div>
             <h1 className="title">People in Session</h1>
             <h2>Session ID {location.state.sessionId}</h2>
-            {
-                // add is host prop to the playback component
-            }
-            <PlaybackComponent currentSong={currentSongData ? currentSongData.item.uri : null}/>
+            <div class="container-fluid overflow-hidden text-center">
+                <div class="row gx-5">
+                    <div class="col">
+                        <div>
+                            <input
+                                type="text"
+                                placeholder="Enter search query"
+                                value={searchQuery}
+                                onChange={handleInputChange}
+                            />
+                            <button className="btn btn-success" onClick={handleSearch}>Search</button>
+                        </div>
+                        <div className="tracks-query container bg-dark mt-4 mb-4">
+                            {tracksReturnedFromQuery ? tracksReturnedFromQuery.map((t, index) => {
+                                return (
+                                    <button class="me-1 mt-2 btn btn-secondary" key={index}  onClick={() => setItemToQueue(t.uri)}>
+                                        {t.name}
+                                    </button>
+                                );
+                            }) : null}
+                        </div>
+                    </div>
+                    <div class="col">
+                        <PlaybackComponent
+                        currentSongFromHost={songUriFromHost ? songUriFromHost : null}
+                        isHost={isHost}
+                    />
+                    </div>
+                </div>
+            </div>
+            <h2>
+                Chat Box
+            </h2>
             {<div className="messages">
                 {messages.map((msg, index) => {
                     const isCurrentUser = msg.sender === currUser.username;

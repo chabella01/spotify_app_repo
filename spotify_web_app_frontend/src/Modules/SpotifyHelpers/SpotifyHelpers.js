@@ -4,7 +4,7 @@ export async function redirectToAuthCodeFlow(clientId) {
     const verifier = generateCodeVerifier(128);
     const challenge = await generateCodeChallenge(verifier);
 
-    localStorage.setItem("verifier", verifier);
+    sessionStorage.setItem("verifier", verifier);
 
     const params = new URLSearchParams();
     params.append("client_id", '4e8f8455d67249839bef6a8dc50cabb7');
@@ -35,7 +35,7 @@ export async function callback() {
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
     const accessToken = await getAccessToken(clientId, code);
-
+    console.log("ACCESS TOKENs: ",accessToken)
     const profile = await fetchProfile(accessToken)
 
 
@@ -43,7 +43,7 @@ export async function callback() {
 }
 
 export async function getAccessToken(clientId, code) {
-    const verifier = localStorage.getItem("verifier");
+    const verifier = sessionStorage.getItem("verifier");
 
     const params = new URLSearchParams();
     params.append("client_id", '4e8f8455d67249839bef6a8dc50cabb7');
@@ -90,7 +90,7 @@ async function fetchProfile(code) {
 }
 
 export async function fetchCurrentSong() {
-    let access_token = localStorage.getItem('access_token')
+    let access_token = sessionStorage.getItem('access_token')
    try {
        const response = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
            headers: {
@@ -104,7 +104,7 @@ export async function fetchCurrentSong() {
 }
 
 export async function playCurrentSong() {
-    let access_token = localStorage.getItem('access_token')
+    let access_token = sessionStorage.getItem('access_token')
     try {
         const response = await fetch('https://api.spotify.com/v1/me/player/play', {
             method: "PUT",
@@ -119,28 +119,132 @@ export async function playCurrentSong() {
 }
 
 export async function setCurrentSong(uri) {
-    let access_token = localStorage.getItem('access_token')
+    let access_token = sessionStorage.getItem('access_token')
+    // console.log("URI IN CURR SONG", uri)
+    // let uris = JSON.stringify([uri])
+    const device_id = await getCurrentDeviceIdLocal()
+    const q = new URLSearchParams({
+        device_id: device_id
+    })
+
     try {
-        const response = await fetch('https://api.spotify.com/v1/me/player/play', {
+        const uri_to_send = []
+        uri_to_send.push(uri)
+        console.log("URI TO SEND: , ", uri_to_send[0])
+        const response = await fetch(`https://api.spotify.com/v1/me/player/play?${q}`, {
             method: "PUT",
             headers: {
-                Authorization: 'Bearer ' + access_token
+                Authorization: 'Bearer ' + access_token,
+                'Content-Type': 'application/json'
             },
-            body: {
-                uris: uri
+            body: JSON.stringify({ "uris": uri_to_send })
+        })
+        console.log('response set song: ',await response.json())
+        return await response.json()
+    } catch(e) {
+        console.log("RESONSE ERROR: ", e)
+
+        return -1
+    }
+}
+
+export async function getCurrentDeviceId() {
+    let access_token = sessionStorage.getItem('access_token')
+    try {
+        const response = await fetch('https://api.spotify.com/v1/me/player/devices', {
+            method: "GET",
+            headers: {
+                Authorization: 'Bearer ' + access_token
             }
         })
+        const data = await response.json()
+        const deviceId = data.devices.find((d) => d.name === 'Web Playback SDK').id
+        const set_response = await setCurrentDeviceId(deviceId)
+        console.log("response ion get curr device id: ", set_response)
         return await response.json()
     } catch(e) {
         return -1
     }
 }
 
-async function getCurrentDeviceId() {
-
+async function getCurrentDeviceIdLocal() {
+    let access_token = sessionStorage.getItem('access_token')
+    try {
+        const response = await fetch('https://api.spotify.com/v1/me/player/devices', {
+            method: "GET",
+            headers: {
+                Authorization: 'Bearer ' + access_token
+            }
+        })
+        const data = await response.json()
+        const deviceId = data.devices.find((d) => d.name === 'Web Playback SDK').id
+        return deviceId
+    } catch(e) {
+        return -1
+    }
 }
 
+export async function setCurrentDeviceId(deviceId) {
+    let access_token = sessionStorage.getItem('access_token');
+    const device_ids = [deviceId];
+    try {
+        const response = await fetch('https://api.spotify.com/v1/me/player/', {
+            method: "PUT",
+            headers: {
+                Authorization: 'Bearer ' + access_token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ device_ids })
+        });
+        return await response.json();
+    } catch (e) {
+        return -1;
+    }
+}
+
+export async function searchSongs(songToSearch) {
+    let access_token = sessionStorage.getItem('access_token');
+    const q = new URLSearchParams({
+        q: songToSearch,
+        type: 'track'
+    })
+    try {
+        const response = await fetch(`https://api.spotify.com/v1/search?${q}`, {
+            method: "GET",
+            headers: {
+                Authorization: 'Bearer ' + access_token,
+                'Content-Type': 'application/json'
+            },
+            // body: JSON.stringify({ q })
+        });
+        return await response.json();
+    } catch (e) {
+        return -1;
+    }
+}
+
+export async function setItemToQueue(uri) {
+    let access_token = sessionStorage.getItem('access_token');
+    const deviceId = await getCurrentDeviceIdLocal()
+    const q = new URLSearchParams({
+        uri: uri,
+        device_id: deviceId
+    })
+    try {
+        const response = await fetch(`https://api.spotify.com/v1/me/player/queue?${q}`, {
+            method: "POST",
+            headers: {
+                Authorization: 'Bearer ' + access_token,
+                'Content-Type': 'application/json'
+            },
+            // body: JSON.stringify({ q })
+        });
+        return await response.json();
+    } catch (e) {
+        return -1;
+    }
+}
 
 export async function setProfile(profile) {
-    localStorage.setItem('profile', profile)
+    sessionStorage.setItem('profile', profile)
 }

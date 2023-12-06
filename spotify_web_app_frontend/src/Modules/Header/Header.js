@@ -7,10 +7,18 @@ import logo from "../../Assets/Images/spotify connections-logos_white.png"
 import {React} from "react";
 import Button from "react-bootstrap/Button";
 import {useAuth} from "../Routing/AuthProvider";
+import 'bootstrap/dist/css/bootstrap.css';
 
 function Header() {
     const navigate = useNavigate()
-
+    const handleClickNewSession = (e) => {
+        e.preventDefault()
+        navigate('/connections')
+    }
+    const handleClickAboutUs = (e) => {
+        e.preventDefault()
+        navigate('/about')
+    }
     const routes = [
         {path: '/connections'},
         {path: '/sessions'},
@@ -18,7 +26,8 @@ function Header() {
         {path: '/register'},
         {path: '/create_session'},
         {path: '/'},
-        {path: '/callback'}
+        {path: '/callback'},
+        {path: '/about'}
 
     ]
     const auth = useAuth()
@@ -29,32 +38,28 @@ function Header() {
         if (!(route.path === '/login') && !(route.path === '/register')) {
             return (
                 <>
-                    <Nav.Link onClick={auth.logout}>
-                        Logout
-                    </Nav.Link>
-                    <Nav.Link className={'nav-link'}>
-                        Profile
-                    </Nav.Link>
+                <a class="nav-link" onClick={handleClickNewSession}>New Session</a>
+                <a class="nav-link" onClick={handleClickAboutUs}>About Us</a>
+                <a class="nav-link" onClick={auth.logout}>Logout</a>
+                
                 </>
             )
         }
         else {
             return (
-                <Nav.Link className={'nav-link'}>
-                    About Us
-                </Nav.Link>
+                <a class="nav-link" onClick={handleClickAboutUs}>About Us</a>
             )
         }
     }
 
 
     return (
-        <Navbar expand={'lg'} className={'navbar-wrapper'} sticky={'top'}>
+        <nav class="navbar bg-body-tertiary nav-pills bg-dark" data-bs-theme="dark">
             <img src={logo} alt="Logo" className={"header-logo"}/>
-            <Container fluid className={'container'}>
+            <div class='nav-item'>
                 {renderNavBar()}
-            </Container>
-        </Navbar>
+            </div>
+        </nav>
     )
 }
 

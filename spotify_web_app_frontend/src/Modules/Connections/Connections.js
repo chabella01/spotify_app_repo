@@ -60,7 +60,7 @@ function Connections() {
     }
 
     return (
-        <div className="connections-container" id="container">
+        <div className="connections-container bg-dark" id="container">
             {getProfileData()}
                 <title>Spotify Page to create session button</title>
                 <link rel="stylesheet" href="connection_page_styles.css"/>
