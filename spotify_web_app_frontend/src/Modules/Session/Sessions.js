@@ -186,7 +186,9 @@ function Sessions() {
         console.log(t.uri)
         setAllowedToQueue(true)
         await setItemToQueue(t.uri);
-
+        const toastLive = document.getElementById('liveToast')
+        const toast = Toast.getOrCreateInstance(toastLive)
+        toast.show()
         setTimeout(function() {
             setClickedAddToQueue(false)
         }, 2000);
@@ -264,7 +266,16 @@ function Sessions() {
                         <button onClick={sendMessage}>Send</button>
                     </div>
                 </div>}
-
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                <div id="liveToast" class="toast text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                    Song Added to the Queue!
+                    </div>
+                </div>
+                </div>
     </>
 
     )
