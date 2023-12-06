@@ -74,7 +74,7 @@ function Header() {
 
     return (
         <nav class="navbar bg-body-tertiary nav-pills bg-dark" data-bs-theme="dark">
-            <img src={logo} alt="Logo" className={"header-logo"} onClick={handleClickHeader}/>
+            <img src={logo} alt="Logo" className={"header-logo change-cursor"} onClick={handleClickHeader}/>
             <div class='nav-item'>
                 {renderNavBar()}
             </div>
