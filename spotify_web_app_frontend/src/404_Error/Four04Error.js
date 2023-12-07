@@ -12,7 +12,7 @@ function Four04Error() {
             <h1>404 Error</h1>
 
             <button onClick={handleNavigate}>
-                Login
+                Return to Login Page
             </button>
         </div>
     )

@@ -21,6 +21,9 @@
     padding: 20px;
     height: auto;
 
+    justify-content: center;
+
+    
 }
 .title {
     font-size: 24px;
@@ -132,11 +135,13 @@ h2 {
 }
 
 .input-area {
-    /*position: absolute;*/
-    /*bottom: 0;*/
-    width: 100%;
+
+    position : sticky;
+    bottom: 0;
+    width: 100%; /* Take the full width of the container */
     background-color: #7F8177;
-    padding: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     border-top: 1px solid #ccc;
     position: fixed;
     bottom: 0;

@@ -86,6 +86,7 @@ function Connections() {
                 <form className="form-floating">
                     <div className="mb-3">
                         <label htmlFor="numericInput" className="form-label">Enter Session ID:</label>
+                        <div style={{display: 'grid', justifyContent: 'center'}}>
                         <input
                             id="numericInput"
                             name="numericInput"
@@ -93,9 +94,11 @@ function Connections() {
                             maxLength="8"
                             onChange={handleChangeSessionId}
                         />
+                        </div>
+                        
                     </div>
                     <div className="mb-3">
-                        <button className="btn btn-primary me-2" onClick={handleClickJoinSession}>
+                        <button className="btn btn-success me-2" onClick={handleClickJoinSession}>
                             Join Existing Session
                         </button>
                         <button className="btn btn-secondary" onClick={handleClickCreateSession}>
