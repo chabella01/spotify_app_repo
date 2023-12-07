@@ -50,6 +50,7 @@ function Sessions() {
 
 
 
+
     useEffect(() => {
         const fetchData = async () => {
             // we only wanna fetch the current song for the host
@@ -208,7 +209,7 @@ function Sessions() {
             <div className="header">
                 <div className="session-info">
                     <h3>Session ID:</h3>
-                    <p> {location.state.sessionId}</p>
+                    <p> {location.state ? location.state.sessionId : null}</p>
                     <div>
                         <h4>Host: {host}</h4>
                     </div>
