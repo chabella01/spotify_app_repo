@@ -142,6 +142,7 @@ h2 {
     background-color: #7F8177;
     padding-top: 10px;
     padding-bottom: 10px;
+    padding-left: 10px;
     border-top: 1px solid #ccc;
     position: fixed;
     bottom: 0;
