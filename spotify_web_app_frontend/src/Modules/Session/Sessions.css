@@ -122,8 +122,8 @@ h2 {
 .messages {
     font-size: 18px;
     position: fixed;
-    background-color: #ffefef;
-    width: 300px;
+    background-color: #2C2C2C;
+    width: 400px;
     height: 600px;
     overflow-y: scroll;
     float: right;
@@ -131,15 +131,18 @@ h2 {
     margin-left: 8px;
     border-radius: 2px;
     top: 150px;
-    right: 0;
+    right: 10px;
+
 }
+
+
 
 .input-area {
 
     position : sticky;
     bottom: 0;
-    width: 100%; /* Take the full width of the container */
-    background-color: #7F8177;
+    width: 400px; /* Take the full width of the container */
+        /*background-color: #7F8177;*/
     padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 10px;
@@ -149,6 +152,8 @@ h2 {
     width: 100%;
     display: inline-block;
     margin-top: 100%;
+    margin-left: 50px;
+    ;
 }
 
 .person {
