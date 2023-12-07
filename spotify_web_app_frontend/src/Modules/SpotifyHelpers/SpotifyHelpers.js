@@ -56,8 +56,8 @@ export async function getAccessToken(clientId, code) {
         headers: {"Content-Type": "application/x-www-form-urlencoded"},
         body: params
     });
-
-    const {access_token} = await result.json();
+    const {access_token, refresh_token} = await result.json();
+    sessionStorage.setItem('refresh_token', refresh_token)
 
     return access_token;
 }

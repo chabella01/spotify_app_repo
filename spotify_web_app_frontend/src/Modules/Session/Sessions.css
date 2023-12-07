@@ -6,7 +6,6 @@
     justify-content: center;
     background-color: #333;
     color: white;
-<<<<<<< HEAD
     /*height: 200vh;*/
 }
 .search-container{
@@ -21,11 +20,7 @@
     bottom: 0;
     padding: 20px;
     height: auto;
-=======
-    justify-content: center;
 
-    
->>>>>>> main
 }
 .title {
     font-size: 24px;
@@ -44,9 +39,7 @@
 h2 {
     font-size: 16px;
 }
-<<<<<<< HEAD
 
-=======
 .container {
     display: inline-block;
     background-color: #333;
@@ -57,7 +50,6 @@ h2 {
     height: 100vh;
     padding: 20px;
 }
->>>>>>> main
 
 /* Styles for individual messages */
 .message {
@@ -125,26 +117,34 @@ h2 {
     /*align-items: center;*/
 }
 .messages {
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #7F8177;
-    margin: 50px;
+    font-size: 18px;
     position: fixed;
-    bottom: 0;
+    background-color: #ffefef;
+    width: 300px;
+    height: 600px;
+    overflow-y: scroll;
+    float: right;
+    display: inline-block;
+    margin-left: 8px;
+    border-radius: 2px;
+    top: 150px;
     right: 0;
-    top: 70px;
-    width: 20vw;
-    overflow-y:auto;
 }
 
 .input-area {
-    position: absolute;
-    bottom: 0;
-    width: 100%; /* Take the full width of the container */
+    /*position: absolute;*/
+    /*bottom: 0;*/
+    width: 100%;
     background-color: #7F8177;
     padding: 10px;
     border-top: 1px solid #ccc;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: inline-block;
+    margin-top: 100%;
 }
+
 .person {
     display: flex;
     align-items: center;
