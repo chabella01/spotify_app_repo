@@ -29,6 +29,25 @@ export async function loginUser() {
     await redirectToAuthCodeFlow(clientId);
 
 }
+export async function getRefreshToken() {
+    const refreshToken = sessionStorage.getItem('refresh_token');
+    const url = "https://accounts.spotify.com/api/token";
+    const payload = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+          grant_type: 'refresh_token',
+          refresh_token: refreshToken,
+          client_id: "4e8f8455d67249839bef6a8dc50cabb7"
+        }),
+      }
+    const body = await fetch(url, payload);
+    const response = await body.json();
+    sessionStorage.setItem('access_token', response.accessToken);
+    sessionStorage.setItem('refresh_token', response.refreshToken);
+}
 
 export async function callback() {
     const clientId = "4e8f8455d67249839bef6a8dc50cabb7";

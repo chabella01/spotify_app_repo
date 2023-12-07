@@ -3,6 +3,7 @@ import './PlaybackComponent.css'
 import SpotifyPlayer from 'react-spotify-player';
 import {fetchCurrentSong, getCurrentDeviceId, setCurrentDeviceId, setCurrentSong} from "./SpotifyHelpers";
 import Paused from '../../Assets/pasued.png'
+import { getRefreshToken } from './SpotifyHelpers';
 
 const track = {
     name: "",
@@ -83,6 +84,7 @@ function PlaybackComponent(props) {
                 });
 
                 player.addListener('authentication_error', ({message}) => {
+                    getRefreshToken()
                     console.error(message);
                 });
 
@@ -163,7 +165,9 @@ function PlaybackComponent(props) {
         )
         } else {
             return (
-                <div class='mb-4'>Only host can manage playback</div>
+                <button className="btn-spotify" class="btn btn-outline-success me-1" onClick={() => { player.togglePlay() }} >
+                        { is_paused ? "PLAY" : "PAUSE" }
+                    </button>
             )
         }
 

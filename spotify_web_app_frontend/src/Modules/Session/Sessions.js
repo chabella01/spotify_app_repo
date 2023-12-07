@@ -7,6 +7,7 @@ import './Sessions.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import { Toast } from 'bootstrap';
 import {
+    getRefreshToken,
     fetchCurrentSong,
     getCurrentDeviceId,
     playCurrentSong, searchSongs,
@@ -65,12 +66,15 @@ function Sessions() {
                     setSongPlaying(false)
                 } else {
                     if (isOpen(socket)){
-                            const songData = {
+                            try {const songData = {
                                 // type: 'uri',
                                 sender: currUser.id,
                                 uri: response.item.uri
                             }
                             socket.send(JSON.stringify(songData))
+                        } catch (e) {
+                            getRefreshToken()
+                        }
                     }
                 }
             }
@@ -172,6 +176,10 @@ function Sessions() {
         }
     };
 
+    const handleLeave = (e) => {
+        e.preventDefault()
+        navigate('/connections')
+    }
     const addTrackToQueue = async (uri) => {
             // add track to queue with spotify api call
             const response  = await setItemToQueue(uri)
@@ -204,6 +212,7 @@ function Sessions() {
                     <div>
                         <h4>Host: {host}</h4>
                     </div>
+                    <button type="button" class = "btn btn-outline-success" onClick={handleLeave}>Leave Session</button>
                 </div>
             </div>
         <div >
@@ -226,7 +235,7 @@ function Sessions() {
                                 value={searchQuery}
                                 onChange={handleInputChange}
                             />
-                            <button className="btn btn-success" onClick={handleSearch}>Search</button>
+                            <button className="btn btn-outline-success" onClick={handleSearch}>Search</button>
                         </div> }
                         {isHost &&
                         <div className="tracks-query">
