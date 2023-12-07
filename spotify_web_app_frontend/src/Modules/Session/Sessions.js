@@ -7,6 +7,7 @@ import './Sessions.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import { Toast } from 'bootstrap';
 import {
+    getRefreshToken,
     fetchCurrentSong,
     getCurrentDeviceId,
     playCurrentSong, searchSongs,
@@ -65,12 +66,15 @@ function Sessions() {
                     setSongPlaying(false)
                 } else {
                     if (isOpen(socket)){
-                            const songData = {
+                            try {const songData = {
                                 // type: 'uri',
                                 sender: currUser.id,
                                 uri: response.item.uri
                             }
                             socket.send(JSON.stringify(songData))
+                        } catch (e) {
+                            getRefreshToken()
+                        }
                     }
                 }
             }
