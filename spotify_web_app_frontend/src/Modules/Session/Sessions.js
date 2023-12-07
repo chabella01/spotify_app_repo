@@ -48,7 +48,15 @@ function Sessions() {
         setTracksReturnedFromQuery(songs.tracks.items)
     };
 
+    useEffect(() =>{
+        const func  = async () => {
+            await getRefreshToken()
+        }
 
+        const interval = setInterval(func, 30*60*1000)
+
+        return () => clearInterval(interval)
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
